@@ -144,7 +144,8 @@ public final class Constants {
     }
   }
   public static class ArmConstants{
-    public static final double initialAngle = 0;
+    public static final double initialAngle = 120;
+    public static final double groundAngle = 0;
     public static final double p = 0;
     public static final int limit = 40;
     public static final double conversionFactor = 0.5;

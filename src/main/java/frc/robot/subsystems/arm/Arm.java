@@ -1,5 +1,7 @@
 package frc.robot.subsystems.arm;
 
+import javax.swing.text.Position;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -33,6 +35,8 @@ if (motorReachesTargetAngle) {
   */
 
 public class Arm extends SubsystemBase {
+    double targetPosition = 0;
+
     // put motors & stuff here
     CANSparkMax armMotor = new CANSparkMax(0, MotorType.kBrushless);
     RelativeEncoder armEncoder = armMotor.getEncoder();
@@ -100,8 +104,19 @@ double armBentBackwards = 150.0;
         // note speed is between -1.0 to 1.0
 
     }
-    public void angle(double position){
+    public void goToAngle(double position){
+        this.targetPosition = position;
         armPIDController.setReference(position, ControlType.kPosition);
+        
 
     }
+   public boolean isAtAngle(){
+    if (armEncoder.getPosition()<targetPosition+10 && armEncoder.getPosition()>targetPosition-10) {
+        return true;
+    }
+    else {
+        return false;
+    }
+   }
+   
 }
