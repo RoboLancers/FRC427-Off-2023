@@ -143,4 +143,16 @@ public final class Constants {
       // add events to map
     }
   }
+
+  public static class IntakeConstants {
+    public static final int IntakeMotorId = 1;
+
+    public static final int IntakeMotorId2 = 2;
+
+    public static final int IntakeMotorlimit = 40;
+    
+    public static final boolean IntakeInversionState1 = true;
+
+    public static final boolean IntakeInversionState2 = true;
+  }
 }
