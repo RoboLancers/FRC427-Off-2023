@@ -143,4 +143,12 @@ public final class Constants {
       // add events to map
     }
   }
+  public static class ArmConstants{
+    public static final double initialAngle = 0;
+    public static final double p = 0;
+    public static final int limit = 40;
+    public static final double conversionFactor = 0.5;
+    public static final double velocityconversionFactor = conversionFactor/60;
+  }
+
 }
