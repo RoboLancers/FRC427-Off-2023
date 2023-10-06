@@ -28,7 +28,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void setupMotors() {
-        // set up motors
+        // set up motors    
         /*
          * 
          (put all constants in Constants.java)
@@ -52,7 +52,7 @@ public class Intake extends SubsystemBase {
         IntakeMotor.set(speed);
         IntakeMotor2.set(speed);
     }
-    public void outake(double speed){
+    public void outtake(double speed){
         IntakeMotor.set(speed);
     }
     public void StopMotor(double speed){
