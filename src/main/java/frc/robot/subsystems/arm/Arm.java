@@ -1,5 +1,8 @@
 package frc.robot.subsystems.arm;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
  /*
@@ -15,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
     // put motors & stuff here
+    CANSparkMax armMotor = new CANSparkMax(deviceId:0), MotorType.kBrushless);
+    RelativeEncoder armEncoder = armMotor.getEncoder();
 
     public Arm() {
         setupMotors();
@@ -29,7 +34,11 @@ public class Arm extends SubsystemBase {
          - set smart current limit (usually 40 is good)
          - set position & velocity conversion factor
          */
+        armMotor.setInverted(isInverted:true);
+        armMotor.setSmartCurrentLimit(limit:40);
 
+        armEncoder.setSmartCurrentLimit(limit:40);
+        armEncoder.setVelocityConversionFactor(0,5/60);
     }
 
     public void setupMotorPID() {
@@ -46,6 +55,6 @@ public class Arm extends SubsystemBase {
 
     public void periodic() {
         // code inside here will run repeatedly while the robot is on
-
+        armMotor.set(speed:1.0);
     }
 }
