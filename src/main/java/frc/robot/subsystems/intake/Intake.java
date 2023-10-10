@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -55,7 +56,10 @@ public class Intake extends SubsystemBase {
     public void outtake(double speed){
         IntakeMotor.set(speed);
     }
-    public void StopMotor(double speed){
+    public void StopMotor(){
         IntakeMotor.set(0);
+    }
+
+    public void timer(Timer timer) {
     }
 }
