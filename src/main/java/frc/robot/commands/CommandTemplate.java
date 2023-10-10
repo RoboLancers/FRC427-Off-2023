@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class CommandTemplate extends CommandBase {
     public CommandTemplate() {
-
+    
     }
 
     public void initialize() {

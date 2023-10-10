@@ -27,11 +27,11 @@ public final class Constants {
   }
 
   public static class DrivetrainConstants {
-    // Wheels
+    // Swerve IDs
     public static class FrontLeft {
-      public static final int kRotate = 9; 
-      public static final int kDrive = 2; 
-      public static final int kRotEncoder = 10; 
+      public static final int kRotate = 9; // turn motor CAN ID
+      public static final int kDrive = 2; // drive motor CAN ID
+      public static final int kRotEncoder = 10; // turn encoder CAN ID
     }
     public static class FrontRight {
       public static final int kRotate = 3; 
@@ -50,62 +50,57 @@ public final class Constants {
     }
 
     // Gearing & Conversions
-    public static final double kGearRatio = 6.8; 
-    public static final double kWheelRadiusInches = 1.5; 
-    public static final double kMetersPerRot = Units.inchesToMeters(2 * Math.PI * kWheelRadiusInches / kGearRatio);
-    public static final double kMetersPerSecondPerRPM = kMetersPerRot / 60;
+    public static final double kGearRatio = 6.8; // driving gear ratio of each swerve module
+    public static final double kWheelRadiusInches = 1.5; // radius of the wheels
+    public static final double kMetersPerRot = Units.inchesToMeters(2 * Math.PI * kWheelRadiusInches / kGearRatio); // calculate the position conversion factor of the swerve drive encoder
+    public static final double kMetersPerSecondPerRPM = kMetersPerRot / 60; // calculate the velocity conversion factor of the swerve drive encoder
 
-    public static final double kRotateGearRatio = 1; 
-    public static final double kDegreesPerRot = 360 / kRotateGearRatio;
-    public static final double kDegreesPerSecondPerRPM = kDegreesPerRot / 60; 
+    public static final double kRotateGearRatio = 1; // gear ratio of the turn encoder (will be 1 as long as we use CANCoders on the output shaft)
+    public static final double kDegreesPerRot = 360 / kRotateGearRatio; // position conversion factor of the turn encoder (converts from rotations to degrees)
+    public static final double kDegreesPerSecondPerRPM = kDegreesPerRot / 60; // velocity conversion factor of the turn encoder 
 
     // Drivebase
-    public static final double kTrackWidthMeters = Units.inchesToMeters(17.5); 
-    public static final double kWheelBaseMeters = Units.inchesToMeters(17.5); 
+    public static final double kTrackWidthMeters = Units.inchesToMeters(17.5); // width of the robot
+    public static final double kWheelBaseMeters = Units.inchesToMeters(17.5); // length of the robot
 
     // Kinematics
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+      // wheel locations relative to the center of the robot
       new Translation2d(kTrackWidthMeters / 2, kWheelBaseMeters / 2), // front left
       new Translation2d(kTrackWidthMeters / 2, -kWheelBaseMeters / 2), // front right
       new Translation2d(-kTrackWidthMeters / 2, kWheelBaseMeters / 2), // back left
       new Translation2d(-kTrackWidthMeters / 2, -kWheelBaseMeters / 2) // back right
     ); 
 
-    // Speeds (v2) (https://github.com/SwerveDriveSpecialties/swerve-template-2021-unmaintained/blob/master/src/main/java/frc/robot/subsystems/DrivetrainSubsystem.java)
+    // copied speeds (https://github.com/SwerveDriveSpecialties/swerve-template-2021-unmaintained/blob/master/src/main/java/frc/robot/subsystems/DrivetrainSubsystem.java)
     public static final double kMaxAttainableSpeedMetersPerSecond = 5880.0 / 60.0 / kGearRatio *
-    2 * Units.inchesToMeters(kWheelRadiusInches) * Math.PI; 
+    2 * Units.inchesToMeters(kWheelRadiusInches) * Math.PI; // max attainable speed for each drive motor
     public static final double kMaxAttainableRotationRadPerSecond = kMaxAttainableSpeedMetersPerSecond /
     Math.hypot(kTrackWidthMeters / 2.0, kWheelBaseMeters / 2.0); // max rotation of robot
     
     // TODO: tune these
     public static final double kMaxSpeedMetersPerSecond = 1.0; // max velocity (no turning) of robot; may tune to be a fraction of the attainable module speed
     public static final double kMaxAccelerationMetersPerSecondSquared = kMaxSpeedMetersPerSecond / 1.0; // max acceleration of robot (accelerate to max speed in 1 second)
-    public static final double kMaxRotationRadPerSecond = Math.PI; 
+    public static final double kMaxRotationRadPerSecond = Math.PI; // max rotation speed of the robot
     public static final double kMaxRotationAccelerationRadPerSecondSquared = Math.PI; // max angular acceleration of robot
 
-    // NO NEED to tune these
+    // feedforward values (NO NEED to tune these)
     public static final double ksVolts = 0; 
     public static final double kvVoltSecondsPerMeter = 0; 
     public static final double kaVoltSecondsSquaredPerMeter = 0; 
 
-    // // per-swerve-module turn feedforward values; calculate by running SysID on one of the turn swerve modules
-    // // make sure to run on the carpet
-    // public static final double ksTurnVolts = 0; 
-    // public static final double kvTurnVoltSecondsPerMeter = 0; 
-    // public static final double kaTurnVoltSecondsSquaredPerMeter = 0; 
-
-
-    // drivetrain sysid (lock wheels)
+    // drive speed PID values for a swerve module
     public static final double kModuleDrive_P = 0; 
     public static final double kModuleDrive_I = 0; 
     public static final double kModuleDrive_D = 0; 
 
     // found from sysid for one of the turn modules or tune by yourself
-    public static final double kModuleTurn_P = 0.0039; 
+    // turn PID values for a swerve module
+    public static final double kModuleTurn_P = 0; 
     public static final double kModuleTurn_I = 0; 
-    public static final double kModuleTurn_D = 0.0017; 
+    public static final double kModuleTurn_D = 0; 
 
-    // turn in place pid
+    // turn in place PID for the whole robot
     public static final double kTurn_P = 0; 
     public static final double kTurn_I = 0; 
     public static final double kTurn_D = 0; 
@@ -114,24 +109,28 @@ public final class Constants {
     public static final double kTurnVelocityThreshold = 0; 
 
     // TODO: tune these but it should be fine
+    // current limits for each motor
     public static final int kDriveCurrentLimit = 40; 
     public static final int kTurnCurrentLimit = 20; 
 
+    // max acceleration/deceleration of each motor (used for high CG robots)
     public static final double kForwardSlewRate = kMaxAccelerationMetersPerSecondSquared; 
     public static final double kStrafeSlewRate = kMaxAccelerationMetersPerSecondSquared; 
     public static final double kTurnSlewRate = kMaxRotationAccelerationRadPerSecondSquared; 
   }
 
   public static class Trajectory {
+    // translational PID of robot for trajectory use
     public static final double kDrive_P = 0; 
     public static final double kDrive_I = 0; 
     public static final double kDrive_D = 0;
 
-    // drivetrain angular sysid
+    // angualr PID (same as turn pid)
     public static final double kOmega_P = DrivetrainConstants.kTurn_P; 
     public static final double kOmega_I = DrivetrainConstants.kTurn_I; 
     public static final double kOmega_D = DrivetrainConstants.kTurn_D; 
 
+    // max velocity & acceleration robot can go when following a trajectory
     public static final double kMaxVelocityMetersPerSecond = 3.21; 
     public static final double kMaxAccelerationMetersPerSecondSquared = 2.54; 
 

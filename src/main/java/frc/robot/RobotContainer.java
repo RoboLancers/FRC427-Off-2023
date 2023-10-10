@@ -5,29 +5,14 @@
 package frc.robot;
 
 import frc.robot.subsystems.drivetrain.Drivetrain;
-import frc.robot.util.Controller;
 import frc.robot.util.DriverController;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-/*
- * Things to talk about: 
- * - FRC control system
- * - subsystems
- *  - periodic
- * - constants
- * - motors
- *  - set power
- *  - encoders
- *  - motor inversion
- *  - smart current limit
- */
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -38,14 +23,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private final AutoPicker autoPicker; 
 
-  // The robot's subsystems and commands are defined here...
+  // drivetrain of the robot
   private final Drivetrain drivetrain = new Drivetrain();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  // controller for the driver
   private final DriverController driverController =
       new DriverController(0);
-
-  // private Command command = new SwerveTunerCommand(Constants.DrivetrainConstants.BackLeft.kRotate, Constants.DrivetrainConstants.BackLeft.kDrive, Constants.DrivetrainConstants.BackLeft.kRotEncoder); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -55,6 +38,7 @@ public class RobotContainer {
     configureBindings();
 
     // driverController.setChassisSpeedsSupplier(drivetrain::getChassisSpeeds); // comment in simulation
+    // default command for drivetrain is to calculate speeds from controller and drive the robot
     drivetrain.setDefaultCommand(new RunCommand(() -> {
       ChassisSpeeds speeds = driverController.getDesiredChassisSpeeds(); 
       SmartDashboard.putNumber("x", speeds.vxMetersPerSecond); 
@@ -74,20 +58,15 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    Controller.onPress(driverController.Y, new InstantCommand(() -> {
-      drivetrain.zeroYaw();
-    }));
+
   }
 
+  // send any data as needed to the dashboard
   public void doSendables() {
 
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+  // givess the currently picked auto as the chosen auto for the match
   public Command getAutonomousCommand() {
     return autoPicker.getAuto(); 
   }
