@@ -23,7 +23,6 @@ public class GoToGround extends CommandBase{
     }
 
     public void execute() {
-        // runs repeatedly until the command is finished
     }
 
     public boolean isFinished() {

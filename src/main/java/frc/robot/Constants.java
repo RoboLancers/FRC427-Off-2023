@@ -140,7 +140,6 @@ public final class Constants {
     public static final HashMap<String, Command> eventMap = new HashMap<>(); 
 
     static {
-      // add events to map
     }
   }
   public static class ArmConstants{
