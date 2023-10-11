@@ -16,7 +16,7 @@ public class GoToHardStop extends CommandBase {
     }
 
     public void initialize() {
-        // runs when the command is FIRST STARTED
+        // arm goes to initial angle
         m_arm.goToAngle(Constants.ArmConstants.kInitialAngle);
 
 
@@ -27,7 +27,7 @@ public class GoToHardStop extends CommandBase {
     }
 
     public boolean isFinished() {
-        // runs and tells whether or not the command should finish
+        // confirms arm is at initial angle
         return m_arm.isAtAngle(); 
     }
 

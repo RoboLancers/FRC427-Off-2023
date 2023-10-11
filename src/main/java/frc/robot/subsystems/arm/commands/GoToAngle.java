@@ -16,18 +16,19 @@ public class GoToAngle extends CommandBase {
     }
 
     public void initialize() {
-        // runs when the command is FIRST STARTED
+        // makes arm go to angle
         m_arm.goToAngle(m_angle);
+        
         
 
     }
 
     public void execute() {
-        // runs repeatedly until the command is finished
+
     }
 
     public boolean isFinished() {
-        // runs and tells whether or not the command should finish
+        // confirmation that arm is at angle
         return m_arm.isAtAngle(); 
     }
 

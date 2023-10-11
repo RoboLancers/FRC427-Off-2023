@@ -16,7 +16,7 @@ public class GoToGround extends CommandBase{
     }
 
     public void initialize() {
-        // runs when the command is FIRST STARTED
+        // makes arm go to ground angle
         m_arm.goToAngle(Constants.ArmConstants.kGroundAngle);
 
 
@@ -27,7 +27,7 @@ public class GoToGround extends CommandBase{
     }
 
     public boolean isFinished() {
-        // runs and tells whether or not the command should finish
+        // makes sure arm is at ground angle
         return m_arm.isAtAngle(); 
     }
 
