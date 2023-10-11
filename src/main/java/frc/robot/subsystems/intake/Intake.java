@@ -19,11 +19,11 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
     // put motors & stuff here
-    CANSparkMax IntakeMotor = new CANSparkMax(Constants.IntakeConstants.IntakeMotorId, MotorType.kBrushless);
-    RelativeEncoder IntakeEncoder = IntakeMotor.getEncoder();
+    CANSparkMax m_intakeMotor = new CANSparkMax(Constants.IntakeConstants.IntakeMotorId, MotorType.kBrushless);
+    RelativeEncoder m_intakeEncoder = m_intakeMotor.getEncoder();
 
-    CANSparkMax IntakeMotor2 = new CANSparkMax(Constants.IntakeConstants.IntakeMotorId2, MotorType.kBrushless);
-    RelativeEncoder IntakeEncoder2 = IntakeMotor.getEncoder();
+    CANSparkMax m_intakeMotor2 = new CANSparkMax(Constants.IntakeConstants.IntakeMotorId2, MotorType.kBrushless);
+    RelativeEncoder m_intakeEncoder2 = m_intakeMotor.getEncoder();
     public Intake() {
 
     }
@@ -37,29 +37,25 @@ public class Intake extends SubsystemBase {
          - set smart current limit (usually 40 is good)
          - set position & velocity conversion factor (later)
          */
-        IntakeMotor.setInverted(Constants.IntakeConstants.IntakeInversionState1);
-        IntakeMotor.setSmartCurrentLimit(Constants.IntakeConstants.IntakeMotorlimit);
+        m_intakeMotor.setInverted(Constants.IntakeConstants.IntakeInversionState1);
+        m_intakeMotor.setSmartCurrentLimit(Constants.IntakeConstants.IntakeMotorlimit);
 
-        IntakeMotor2.setInverted(Constants.IntakeConstants.IntakeInversionState2);
-        IntakeMotor2.setSmartCurrentLimit(Constants.IntakeConstants.IntakeMotorlimit);
-        IntakeMotor2.follow(IntakeMotor);
+        m_intakeMotor2.setInverted(Constants.IntakeConstants.IntakeInversionState2);
+        m_intakeMotor2.setSmartCurrentLimit(Constants.IntakeConstants.IntakeMotorlimit);
+        m_intakeMotor2.follow(m_intakeMotor);
     }
 
     public void periodic() {
         // code inside here will run repeatedly while the robot is on
         
     }
-    public void intake(double speed){
-        IntakeMotor.set(speed);
-        IntakeMotor2.set(speed);
+    public void intakeCube(double speed){
+        m_intakeMotor.set(speed);
     }
     public void outtake(double speed){
-        IntakeMotor.set(speed);
+        m_intakeMotor.set(-speed);
     }
-    public void StopMotor(){
-        IntakeMotor.set(0);
-    }
-
-    public void timer(Timer timer) {
+    public void stopMotor(){
+        m_intakeMotor.set(0);
     }
 }
