@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.subsystems.arm.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -17,7 +17,7 @@ public class GoToGround extends CommandBase{
 
     public void initialize() {
         // runs when the command is FIRST STARTED
-        arm.goToAngle(Constants.ArmConstants.groundAngle);
+        arm.goToAngle(Constants.ArmConstants.kGroundAngle);
 
 
     }

@@ -144,12 +144,23 @@ public final class Constants {
     }
   }
   public static class ArmConstants{
-    public static final double initialAngle = 120;
-    public static final double groundAngle = 0;
-    public static final double p = 0;
-    public static final int limit = 40;
-    public static final double conversionFactor = 0.5;
-    public static final double velocityconversionFactor = conversionFactor/60;
+    public static double kFF = 0;
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kG = 0;
+    public static final double kA = 0;
+    public static final double kT = 0;
+    public static final double kArmLength = 0;
+    public static final double kArmWeight = 0;
+    public static final double kMortorOhms = 0;
+    public static final double kGearBox = 0;
+    public static final double kInitialAngle = 120;
+    public static final double kGroundAngle = 0;
+    public static final double kP = 0;
+    public static final int kCurrentLimit = 40;
+    public static final double kConversionFactor = 0.5;
+    public static final double kVelocityConversionFactor = kConversionFactor/60;
+    public static final double kAngleError = 0;
   }
 
 }

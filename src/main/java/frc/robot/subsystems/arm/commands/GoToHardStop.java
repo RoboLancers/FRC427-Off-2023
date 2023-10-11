@@ -1,23 +1,24 @@
-package frc.robot.commands;
+package frc.robot.subsystems.arm.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.arm.Arm;
 
-public class GoToAngle extends CommandBase {
+public class GoToHardStop extends CommandBase {
     Arm arm;
-    double angle;
+  
 
-    public GoToAngle(Arm arm, double angle) {
+    public GoToHardStop(Arm arm) {
         this.arm = arm;
-        this.angle = angle;
+    
 
         addRequirements(arm);
-
     }
 
     public void initialize() {
         // runs when the command is FIRST STARTED
-        arm.goToAngle(angle);
+        arm.goToAngle(Constants.ArmConstants.kInitialAngle);
+
 
     }
 
@@ -34,8 +35,3 @@ public class GoToAngle extends CommandBase {
         // runs when the command is ended
     }
 }
-
-
-
-//Make arm go to angle
-//arm to hard stop, arm to ground 
