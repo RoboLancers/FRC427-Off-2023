@@ -1,48 +1,54 @@
 package frc.robot.subsystems.intake.commands;
 
+import java.sql.Time;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.intake.Intake;
 
+// declare how long to intake for and how fast
 public class IntakeForTime extends CommandBase {
-  
-    Intake intake;
-    double speed;
 
-    Timer timer = new Timer();
-    private double time;
+    Intake m_intake;
+    double m_speed;
+
+    Timer m_timer = new Timer();
+    private double m_time;
+
+    // establishes intake, speed, and time
     public IntakeForTime(Intake intake, double speed, double time) {
-    this.intake = intake;
-    this.speed = speed;
-    this.time = time;
+    this.m_intake = intake;
+    this.m_speed = speed;
+    this.m_time = time;
 
-        addRequirements(intake);
+    addRequirements(intake);
+
     }
 
     public void initialize() {
         // runs when the command is FIRST STARTED
-        this.intake.intake(speed);     
-        timer.start();
+        //intakes cube for at a certain speed and declares timer starting
+        this.m_intake.intakeCube(m_speed);     
+        m_timer.start();
     }   
 
     public void execute() {
          // runs repeatedly until the command is finished
     
-    
     }
 
     public boolean isFinished() {
         // runs and tells whether or not the command should finish
-       if (this.timer.hasElapsed(time)) {
-        return true;
-       } else {
-        return false;
-       }
+      return this.m_timer.hasElapsed(m_time);
+
+        // return this.m_timer.hasElapsed(m_time);
+       
     }
 
     public void end(boolean interrupted) {
         // runs when the command is ended
-        this.intake.StopMotor();
+        // stops motor
+        this.m_intake.stopMotor();
     }
 }

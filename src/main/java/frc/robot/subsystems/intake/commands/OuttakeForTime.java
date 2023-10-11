@@ -6,24 +6,26 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.intake.Intake;
 
 public class OuttakeForTime extends CommandBase {
-  
-    Outtake outtake;
-    double speed;
+        // declare how long to outtake for and how fast
+    Intake m_intake;
+    double m_speed;
 
-    Timer timer = new Timer();
-    private double time;
-    public OuttakeForTime(Outtake outtake, double speed, double time) {
-    this.outtake = outtake;
-    this.speed = speed;
-    this.time = time;
+    Timer m_timer = new Timer();
+    private double m_time;
+        // establishes outtake, speed, and time
+    public OuttakeForTime(Intake outtake, double speed, double time) {
+    this.m_intake = outtake;
+    this.m_speed = speed;
+    this.m_time = time;
 
         addRequirements(outtake);
     }
 
     public void initialize() {
         // runs when the command is FIRST STARTED
-        this.outtake.intake(speed);     
-        timer.start();
+        //outtakes cube for at a certain speed and declares timer starting
+        this.m_intake.outtake(m_speed);     
+        m_timer.start();
     }   
 
     public void execute() {
@@ -34,15 +36,12 @@ public class OuttakeForTime extends CommandBase {
 
     public boolean isFinished() {
         // runs and tells whether or not the command should finish
-       if (this.timer.hasElapsed(time)) {
-        return true;
-       } else {
-        return false;
-       }
+        return this.m_timer.hasElapsed(m_time);
     }
 
     public void end(boolean interrupted) {
         // runs when the command is ended
-        this.outtake.StopMotor();
+        // stops motor
+        this.m_intake.stopMotor();
     }
 }
