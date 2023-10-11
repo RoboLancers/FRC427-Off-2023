@@ -38,6 +38,7 @@ public class Arm extends SubsystemBase {
     
 
     // put motors & stuff here
+    //Initializing motors; defining encoders; defining PID controllers; defining feedforward
     CANSparkMax m_armMotor = new CANSparkMax(0, MotorType.kBrushless);
     RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
     SparkMaxPIDController m_ArmPIDController = m_armMotor.getPIDController();
@@ -68,6 +69,7 @@ public class Arm extends SubsystemBase {
          m_armEncoder.setVelocityConversionFactor(Constants.ArmConstants.kVelocityConversionFactor);
 // thingy for encoder angle
          m_armEncoder.setPosition(Constants.ArmConstants.kInitialAngle);
+         //setup PID :)
          m_ArmPIDController.setP(Constants.ArmConstants.kP);
          m_ArmPIDController.setI(0);
          m_ArmPIDController.setD(0);
