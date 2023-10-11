@@ -5,11 +5,11 @@ import frc.robot.Constants;
 import frc.robot.subsystems.arm.Arm;
 
 public class GoToHardStop extends CommandBase {
-    Arm arm;
+    Arm m_arm;
   
 
     public GoToHardStop(Arm arm) {
-        this.arm = arm;
+        m_arm = arm;
     
 
         addRequirements(arm);
@@ -17,7 +17,7 @@ public class GoToHardStop extends CommandBase {
 
     public void initialize() {
         // runs when the command is FIRST STARTED
-        arm.goToAngle(Constants.ArmConstants.kInitialAngle);
+        m_arm.goToAngle(Constants.ArmConstants.kInitialAngle);
 
 
     }
@@ -28,7 +28,7 @@ public class GoToHardStop extends CommandBase {
 
     public boolean isFinished() {
         // runs and tells whether or not the command should finish
-        return arm.isAtAngle(); 
+        return m_arm.isAtAngle(); 
     }
 
     public void end(boolean interrupted) {

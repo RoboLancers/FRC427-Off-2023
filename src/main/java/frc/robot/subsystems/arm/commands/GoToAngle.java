@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Arm;
 
 public class GoToAngle extends CommandBase {
-    Arm arm;
-    double angle;
+    Arm m_arm;
+    double m_angle;
 
     public GoToAngle(Arm arm, double angle) {
-        this.arm = arm;
-        this.angle = angle;
+        m_arm = arm;
+        m_angle = angle;
 
         addRequirements(arm);
 
@@ -17,7 +17,7 @@ public class GoToAngle extends CommandBase {
 
     public void initialize() {
         // runs when the command is FIRST STARTED
-        arm.goToAngle(angle);
+        m_arm.goToAngle(m_angle);
         
 
     }
@@ -28,7 +28,7 @@ public class GoToAngle extends CommandBase {
 
     public boolean isFinished() {
         // runs and tells whether or not the command should finish
-        return arm.isAtAngle(); 
+        return m_arm.isAtAngle(); 
     }
 
     public void end(boolean interrupted) {
