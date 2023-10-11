@@ -38,15 +38,15 @@ public class Arm extends SubsystemBase {
     
 
     // put motors & stuff here
-    CANSparkMax armMotor = new CANSparkMax(0, MotorType.kBrushless);
-    RelativeEncoder armEncoder = armMotor.getEncoder();
-    SparkMaxPIDController armPIDController = armMotor.getPIDController();
-    ArmFeedforward feedforward = new ArmFeedforward(Constants.ArmConstants.kS, Constants.ArmConstants.kV, Constants.ArmConstants.kG, Constants.ArmConstants.kA);
+    CANSparkMax m_armMotor = new CANSparkMax(0, MotorType.kBrushless);
+    RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
+    SparkMaxPIDController armPIDController = m_armMotor.getPIDController();
+    ArmFeedforward m_feedForward = new ArmFeedforward(Constants.ArmConstants.kS, Constants.ArmConstants.kV, Constants.ArmConstants.kG, Constants.ArmConstants.kA);
     
 
     public Arm() {
         setupMotors();
-        feedforward.calculate(m_targetPosition, m_targetPosition);
+        m_feedForward.calculate(m_targetPosition, m_targetPosition);
     }
 
     public void setupMotors() {
@@ -59,14 +59,14 @@ public class Arm extends SubsystemBase {
          - set position & velocity conversion factor
          */
 
-         armMotor.setInverted(true);
+         m_armMotor.setInverted(true);
          // note motor counts rotations
-         armMotor.setSmartCurrentLimit(Constants.ArmConstants.kCurrentLimit);
-         armEncoder.setPositionConversionFactor(Constants.ArmConstants.kConversionFactor);
+         m_armMotor.setSmartCurrentLimit(Constants.ArmConstants.kCurrentLimit);
+         m_armEncoder.setPositionConversionFactor(Constants.ArmConstants.kConversionFactor);
          // to get the value below, divide this value (0.5) by 60
-         armEncoder.setVelocityConversionFactor(Constants.ArmConstants.kVelocityConversionFactor);
+         m_armEncoder.setVelocityConversionFactor(Constants.ArmConstants.kVelocityConversionFactor);
 // thingy for encoder angle
-         armEncoder.setPosition(Constants.ArmConstants.kInitialAngle);
+         m_armEncoder.setPosition(Constants.ArmConstants.kInitialAngle);
          armPIDController.setP(Constants.ArmConstants.kP);
          armPIDController.setI(0);
          armPIDController.setD(0);
@@ -103,13 +103,13 @@ double armBentBackwards = 150.0;
     
     public void goToAngle(double position){
         this.m_targetPosition = position;
-        Constants.ArmConstants.kFF = feedforward.calculate(position, m_velocity);
+        Constants.ArmConstants.kFF = m_feedForward.calculate(position, m_velocity);
     }
         public void periodic() {
         // code inside here will run repeatedly while the robot is on
         // note speed is between -1.0 to 1.0
         armPIDController.setReference(this.m_targetPosition, ControlType.kPosition, 0, Constants.ArmConstants.kFF);
-        this.m_velocity = armEncoder.getVelocity();
+        this.m_velocity = m_armEncoder.getVelocity();
 
     }
     ;
@@ -118,7 +118,7 @@ double armBentBackwards = 150.0;
 
     
    public boolean isAtAngle(){
-    if (armEncoder.getPosition()<m_targetPosition+Constants.ArmConstants.kAngleError && armEncoder.getPosition()>m_targetPosition-Constants.ArmConstants.kAngleError) {
+    if (m_armEncoder.getPosition()<m_targetPosition+Constants.ArmConstants.kAngleError && m_armEncoder.getPosition()>m_targetPosition-Constants.ArmConstants.kAngleError) {
         return true;
     }
     else {
