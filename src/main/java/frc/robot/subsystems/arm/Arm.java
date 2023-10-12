@@ -1,5 +1,8 @@
 package frc.robot.subsystems.arm;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
  /*
@@ -29,7 +32,6 @@ public class Arm extends SubsystemBase {
          - set smart current limit (usually 40 is good)
          - set position & velocity conversion factor
          */
-
     }
 
     public void setupMotorPID() {
@@ -46,6 +48,5 @@ public class Arm extends SubsystemBase {
 
     public void periodic() {
         // code inside here will run repeatedly while the robot is on
-
     }
 }
