@@ -1,8 +1,6 @@
 package frc.robot.subsystems.intake.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.intake.Intake;
 
 public class TakeOut extends CommandBase {
