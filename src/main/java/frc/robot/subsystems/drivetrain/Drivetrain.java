@@ -25,7 +25,7 @@ public class Drivetrain extends SubsystemBase {
   private SwerveDrivePoseEstimator odometry; 
 
   // initialize the gyro on the robot
-  private AHRS gyro = new AHRS(SPI.Port.kMXP);
+  public AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   // represents the current drive state of the robot
   private DriveState driveState = DriveState.OPEN_LOOP; 
