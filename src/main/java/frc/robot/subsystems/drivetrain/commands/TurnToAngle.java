@@ -1,7 +1,5 @@
 package frc.robot.subsystems.drivetrain.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,16 +7,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
+// makes the robot turn to a certain absolute angle (relative to gyro's zero)
 public class TurnToAngle extends CommandBase {
-        private Drivetrain drivetrain;  
-        private PIDController pidController; 
-        private DoubleSupplier setpoint; 
+        protected Drivetrain drivetrain;  
+        protected PIDController pidController; 
+        protected double setpoint; 
 
-        public TurnToAngle(Drivetrain drivetrain, double angle) {
-            this(drivetrain, () -> angle); 
-        }
+        private double minOutput = -Math.PI; 
+        private double maxOutput = Math.PI; 
     
-        public TurnToAngle(Drivetrain drivetrain, DoubleSupplier setpoint) {
+        public TurnToAngle(Drivetrain drivetrain, double setpoint) {
+            // initialize PID controller
             this.pidController = new PIDController(
                 Constants.DrivetrainConstants.kTurn_P,
                 Constants.DrivetrainConstants.kTurn_I,
@@ -27,23 +26,21 @@ public class TurnToAngle extends CommandBase {
             this.pidController.setTolerance(Constants.DrivetrainConstants.kTurnErrorThreshold);
             this.pidController.enableContinuousInput(-180.0, 180.0);
             
-            SmartDashboard.putNumber("Angular kP", SmartDashboard.getNumber("Angular kP", Constants.DrivetrainConstants.kTurn_P)); 
-            SmartDashboard.putNumber("Angular kI", SmartDashboard.getNumber("Angular kI", Constants.DrivetrainConstants.kTurn_I)); 
-            SmartDashboard.putNumber("Angular kD", SmartDashboard.getNumber("Angular kD", Constants.DrivetrainConstants.kTurn_D)); 
-            SmartDashboard.putNumber("Angular kFF", SmartDashboard.getNumber("Angular kFF", Constants.DrivetrainConstants.kTurn_FF)); 
-
-            SmartDashboard.putBoolean("Angular Running", true);
+            // DEBUG: add tunable constants to dashboad
+            // SmartDashboard.putNumber("Angular kP", SmartDashboard.getNumber("Angular kP", Constants.DrivetrainConstants.kTurn_P)); 
+            // SmartDashboard.putNumber("Angular kI", SmartDashboard.getNumber("Angular kI", Constants.DrivetrainConstants.kTurn_I)); 
+            // SmartDashboard.putNumber("Angular kD", SmartDashboard.getNumber("Angular kD", Constants.DrivetrainConstants.kTurn_D)); 
+            // SmartDashboard.putNumber("Angular kFF", SmartDashboard.getNumber("Angular kFF", Constants.DrivetrainConstants.kTurn_FF)); 
     
             this.drivetrain = drivetrain;
             this.setpoint = setpoint; 
 
             addRequirements(drivetrain);
-            System.out.println("hi");
         }
     
         @Override
         public void execute() {
-            // For tuning
+            // DEBUG: 
             // System.out.println(SmartDashboard.getNumber("Angular kP", 0.0));
             // this.pidController.setPID(
             //     SmartDashboard.getNumber("Angular kP", 0.0),
@@ -57,26 +54,39 @@ public class TurnToAngle extends CommandBase {
             //     SmartDashboard.getNumber("Angular kD", 0.0)
             // );
 
-            double output = pidController.calculate(drivetrain.getYaw(), setpoint.getAsDouble()); 
-            //  + SmartDashboard.getNumber("Angular kFF", 0) * Math.signum(pidController.getPositionError());
-            if (Math.abs(output) < Constants.DrivetrainConstants.kTurn_FF) output = Math.signum(output) * Constants.DrivetrainConstants.kTurn_FF;  
-            output = MathUtil.clamp(output, -1, 1); 
-            SmartDashboard.putNumber("setpoint", setpoint.getAsDouble()); 
+            // calculate the output angular velocity to run the robot at 
+            double output = pidController.calculate(drivetrain.getYaw(), setpoint); 
+
+            // clamp the output so the robot doesn't run TOO fast
+            output = MathUtil.clamp(output, -minOutput, maxOutput); 
+
+            // DEBUG: output the current setpoint, error, etc. to the dashboard
+            SmartDashboard.putNumber("setpoint", setpoint); 
             SmartDashboard.putNumber("error", pidController.getPositionError()); 
             // SmartDashboard.putNumber("", output); 
             SmartDashboard.putNumber("output", output); 
             SmartDashboard.putNumber("angle velo", pidController.getVelocityError()); 
+
+            // drive robot with the desired output
             drivetrain.swerveDrive(0, 0, output);
         }
     
         @Override
-        public void end(boolean interrupted) {
-            SmartDashboard.putBoolean("Angular Running", false);
-            drivetrain.brake();
-        }
+        public void end(boolean interrupted) {}
     
         @Override
         public boolean isFinished() {
+            // checks if the robot is at the desired position
             return this.pidController.atSetpoint();
+        }
+
+        // set the min rotation speed that the PID controller can give
+        public void setMinOutput(double minOutput) {
+            this.minOutput = minOutput; 
+        }
+
+        // set the max rotation speed that the PID controller can give
+        public void setMaxOutput(double maxOutput) {
+            this.maxOutput = maxOutput; 
         }
 }

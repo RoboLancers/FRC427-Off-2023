@@ -9,39 +9,39 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.SwerveModule.DriveState;
 
 public class Drivetrain extends SubsystemBase {
+
+  // set up the four swerve modules  
   private SwerveModule frontLeft = new SwerveModule(Constants.DrivetrainConstants.FrontLeft.kRotate, Constants.DrivetrainConstants.FrontLeft.kDrive, Constants.DrivetrainConstants.FrontLeft.kRotEncoder); 
   private SwerveModule frontRight = new SwerveModule(Constants.DrivetrainConstants.FrontRight.kRotate, Constants.DrivetrainConstants.FrontRight.kDrive, Constants.DrivetrainConstants.FrontRight.kRotEncoder); 
   private SwerveModule backLeft = new SwerveModule(Constants.DrivetrainConstants.BackLeft.kRotate, Constants.DrivetrainConstants.BackLeft.kDrive, Constants.DrivetrainConstants.BackLeft.kRotEncoder); 
   private SwerveModule backRight = new SwerveModule(Constants.DrivetrainConstants.BackRight.kRotate, Constants.DrivetrainConstants.BackRight.kDrive, Constants.DrivetrainConstants.BackRight.kRotEncoder); 
 
+  // initialize swerve position estimator
   private SwerveDrivePoseEstimator odometry; 
 
+  // initialize the gyro on the robot
   private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
+  // represents the current drive state of the robot
   private DriveState driveState = DriveState.OPEN_LOOP; 
 
   public Drivetrain() {
-    
+    // zero yaw when drivetrain first starts up
     this.gyro.zeroYaw();
 
+    // create the pose estimator
     this.odometry = new SwerveDrivePoseEstimator(Constants.DrivetrainConstants.kDriveKinematics, gyro.getRotation2d(), getPositions(), new Pose2d()); 
   }
 
   @Override
   public void periodic() {
-    this.odometry.update(gyro.getRotation2d(), getPositions()); 
-    SmartDashboard.putNumber("gyro angle", this.gyro.getRotation2d().getDegrees()); 
-
-    try {
-    SmartDashboard.putNumber("FL target speed", frontLeft.getReferenceState().speedMetersPerSecond); 
-    SmartDashboard.putNumber("FL speed", frontLeft.getCurrentState().speedMetersPerSecond); 
-    } catch(Exception err) {}
+    // update the odometry with the newest rotations, positions of the swerve modules
+    this.odometry.update(gyro.getRotation2d(), getPositions());
   }
 
   @Override
@@ -50,6 +50,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
   
+  /**
+   * 
+   * Drive the robot with a forward, sidewards, rotation speed
+   * 
+   * @param xMetersPerSecond the speed to drive forward with in meters per second
+   * @param yMetersPerSecond the speed to drive sidewards with in meters per second
+   * @param rotationRadPerSecond the speed to rotate at in radians per second
+   * 
+   */
   public void swerveDrive(double xMetersPerSecond, double yMetersPerSecond, double rotationRadPerSecond) {
     swerveDrive(new ChassisSpeeds(
       xMetersPerSecond, 
@@ -59,11 +68,19 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void swerveDrive(ChassisSpeeds speeds) {
-    SwerveModuleState[] states = Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, gyro.getRotation2d())); 
+    // calculate module states from the target speeds
+    SwerveModuleState[] states = Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(
+        speeds, 
+        gyro.getRotation2d()
+      )); 
+
+      // ensure all speeds are reachable by the wheel
       SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.DrivetrainConstants.kMaxAttainableSpeedMetersPerSecond);
+
       swerveDrive(states);
   }
 
+  // command the swerve modules to the intended states
   public void swerveDrive(
     SwerveModuleState[] states) {
       this.frontLeft.updateState(states[0], driveState);
@@ -72,10 +89,7 @@ public class Drivetrain extends SubsystemBase {
       this.backRight.updateState(states[3], driveState);
   }
 
-  public void brake() {
-    swerveDrive(Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(new ChassisSpeeds()));
-  }
-
+  // returns the positions of all the swerve modules
   public SwerveModulePosition[] getPositions() {
     return new SwerveModulePosition[] {
       frontLeft.getPosition(), 
@@ -85,6 +99,7 @@ public class Drivetrain extends SubsystemBase {
     }; 
   }
   
+  // returns the speeds and angles of all the swerve modules
   public SwerveModuleState[] getStates() {
     return new SwerveModuleState[] {
       frontLeft.getCurrentState(), 
@@ -94,27 +109,27 @@ public class Drivetrain extends SubsystemBase {
     }; 
   }
 
+  // returns the speed of the robot 
   public ChassisSpeeds getChassisSpeeds() {
     return Constants.DrivetrainConstants.kDriveKinematics.toChassisSpeeds(getStates()); 
   }
 
+  // returns the current odometry pose of the robot
   public Pose2d getPose() {
     return odometry.getEstimatedPosition(); 
   }
 
-  public void resetPose(Pose2d pose) {
-    odometry.resetPosition(gyro.getRotation2d(), getPositions(), pose);
-  }
-
-    // Returns the direction the robot is facing in degrees from -180 to 180 degrees.
-    public double getHeading() {
+  // returns the direction the robot is facing in degrees from -180 to 180 degrees.
+  public double getHeading() {
       return gyro.getRotation2d().getDegrees();
   }
 
-  public void zeroYaw() {
+  // zeros the current heading of the robot
+  public void zeroHeading() {
     gyro.zeroYaw();
   }
 
+  // gets the raw heading of the robot
   public double getYaw() {
       return -gyro.getYaw(); 
   }
@@ -124,10 +139,15 @@ public class Drivetrain extends SubsystemBase {
       return -gyro.getRate();
   }
 
+  // reset the current pose of the robot to a set pose
   public void resetOdometry(Pose2d pose) {
     odometry.resetPosition(gyro.getRotation2d(), getPositions(), pose);
   }
 
+  /**
+   * set the drive state of the robot
+   * @see DriveState
+   */ 
   public void setDriveState(DriveState state) {
     this.driveState = state; 
   }
