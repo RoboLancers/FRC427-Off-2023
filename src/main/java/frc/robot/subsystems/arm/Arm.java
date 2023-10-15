@@ -29,53 +29,31 @@ public class Arm extends SubsystemBase {
     }
 
     public void setupMotors() {
-
-         m_armMotor.setInverted(true);
-         // note motor counts rotations
-         m_armMotor.setSmartCurrentLimit(Constants.ArmConstants.kCurrentLimit);
-         m_armEncoder.setPositionConversionFactor(Constants.ArmConstants.kConversionFactor);
-         // to get the value below, divide this value (0.5) by 60
-         m_armEncoder.setVelocityConversionFactor(Constants.ArmConstants.kVelocityConversionFactor);
-         m_armEncoder.setPosition(Constants.ArmConstants.kInitialAngle);
-         //setup PID :)
-         m_ArmPIDController.setP(Constants.ArmConstants.kP);
-         m_ArmPIDController.setI(0);
-         m_ArmPIDController.setD(0);
-         
-
-           
-
-
-            
-            
-        } 
-
-        
-    
-
-    
-
-    public void setupMotorPID() {
-         
+        m_armMotor.setInverted(true);
+        // note motor counts rotations
+        m_armMotor.setSmartCurrentLimit(Constants.ArmConstants.kCurrentLimit);
+        m_armEncoder.setPositionConversionFactor(Constants.ArmConstants.kConversionFactor);
+        // to get the value below, divide this value (0.5) by 60
+        m_armEncoder.setVelocityConversionFactor(Constants.ArmConstants.kVelocityConversionFactor);
+        m_armEncoder.setPosition(Constants.ArmConstants.kInitialAngle);
+        //setup PID :)
+        m_ArmPIDController.setP(Constants.ArmConstants.kP);
+        m_ArmPIDController.setI(0);
+        m_ArmPIDController.setD(0);
     }
     
     public void goToAngle(double position){
         // sets position to target position; feedforward calculations for position and velocity
         this.m_targetPosition = position;
-        Constants.ArmConstants.kFF = m_feedForward.calculate(position, m_velocity);
     }
-        public void periodic() {
+
+    public void periodic() {
         // gets velocity + more calculations for PID
-        m_ArmPIDController.setReference(this.m_targetPosition, ControlType.kPosition, 0, Constants.ArmConstants.kFF);
+        m_ArmPIDController.setReference(this.m_targetPosition, ControlType.kPosition, 0, m_feedForward.calculate(m_armEncoder.getPosition(), m_velocity));
         this.m_velocity = m_armEncoder.getVelocity();
-
     }
-    ;
     
-        
-
-    
-   public boolean isAtAngle(){
+   public boolean isAtAngle() {
     // checks if position is good or not
     if (m_armEncoder.getPosition()<m_targetPosition+Constants.ArmConstants.kAngleError && m_armEncoder.getPosition()>m_targetPosition-Constants.ArmConstants.kAngleError) {
         return true;
@@ -84,5 +62,4 @@ public class Arm extends SubsystemBase {
         return false;
     }
    }
-   
 }
