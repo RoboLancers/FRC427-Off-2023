@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.Constants;
 
-public class BalanceAuto extends CommandBase {
+public class Balance extends CommandBase {
     Drivetrain m_drivetrain;
     PIDController m_BalancePID = new PIDController(
         Constants.BalanceAutoConstants.kBalance_P,
@@ -14,9 +14,10 @@ public class BalanceAuto extends CommandBase {
         Constants.BalanceAutoConstants.kBalance_D
     );
 
-public BalanceAuto(Drivetrain drivetrain) {
+public Balance(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     m_BalancePID.enableContinuousInput(-180, 180);
+    m_BalancePID.setTolerance(Constants.BalanceAutoConstants.kBalanceErrorThreshold);
 
     addRequirements(drivetrain);
 
@@ -28,8 +29,10 @@ public BalanceAuto(Drivetrain drivetrain) {
     }
 
     public void execute() {
-        // Compares our current angle to the desired angle of 0 
-        m_BalancePID.calculate(m_drivetrain.gyro.getPitch(), m_BalancePID.getSetpoint());
+        // Calculates our current angle to the desired angle of 0. 
+        // Then uses the calulated number in the PID to drive at certain speed to get to 0 degrees on the pad
+    double speedOnDegree = m_BalancePID.calculate(m_drivetrain.gyro.getPitch(), m_BalancePID.getSetpoint());
+        m_drivetrain.swerveDrive(speedOnDegree, 0, 0);
     }
 
     public boolean isFinished() {
@@ -38,6 +41,7 @@ public BalanceAuto(Drivetrain drivetrain) {
     }
 
     public void end(boolean interrupted) {
-        // runs when the command is ended
+        // tells the bot to STOP MOVING when alls done
+        m_drivetrain.swerveDrive(0, 0, 0);
     }
 }
