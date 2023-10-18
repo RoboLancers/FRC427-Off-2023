@@ -141,7 +141,8 @@ public final class Constants {
     static {
     }
   }
-  public static class ArmConstants{
+  
+  public static class ArmConstants {
     public static double kFF = 0;
     public static final double kS = 0;
     public static final double kV = 0;
@@ -161,4 +162,15 @@ public final class Constants {
     public static final double kAngleError = 0;
   }
 
+  public static class IntakeConstants {
+    public static final int IntakeMotorId = 1;
+
+    public static final int IntakeMotorId2 = 2;
+
+    public static final int IntakeMotorlimit = 40;
+    
+    public static final boolean IntakeInversionState1 = true;
+
+    public static final boolean IntakeInversionState2 = true;
+  }
 }
