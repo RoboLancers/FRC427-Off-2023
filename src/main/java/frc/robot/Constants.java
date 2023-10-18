@@ -139,8 +139,27 @@ public final class Constants {
     public static final HashMap<String, Command> eventMap = new HashMap<>(); 
 
     static {
-      // add events to map
     }
+  }
+  
+  public static class ArmConstants {
+    public static double kFF = 0;
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kG = 0;
+    public static final double kA = 0;
+    public static final double kT = 0;
+    public static final double kArmLength = 0;
+    public static final double kArmWeight = 0;
+    public static final double kMortorOhms = 0;
+    public static final double kGearBox = 0;
+    public static final double kInitialAngle = 120;
+    public static final double kGroundAngle = 0;
+    public static final double kP = 0;
+    public static final int kCurrentLimit = 40;
+    public static final double kConversionFactor = 0.5;
+    public static final double kVelocityConversionFactor = kConversionFactor/60;
+    public static final double kAngleError = 0;
   }
 
   public static class IntakeConstants {
