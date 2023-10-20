@@ -31,6 +31,20 @@ public class AutoPicker {
             true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
             driveSubsystem // The drive subsystem. Used to properly set the requirements of path following commands
         ); 
+
+
+    }
+
+    public void addEvents() {
+        // eg. addEvent("intake_cube", new IntakeForTime(intake, 1, 2)); 
+    }
+
+    public void addAutos() {
+        // eg. addPPSwerveAuto("BalanceAuto", "Mid Lane Auto"); 
+    }
+
+    public void addEvent(String key, Command command) {
+        Constants.Trajectory.eventMap.put(key, command); 
     }
 
     // add an arbitrary auto as a command
@@ -39,15 +53,15 @@ public class AutoPicker {
     }
 
     // add a path planner auto based on file name
-    public Command addPPSwerveAuto(String name, String fileName, double maxVel, double maxAccel) {
+    public void addPPSwerveAuto(String name, String fileName, double maxVel, double maxAccel) {
         List<PathPlannerTrajectory> group = PathPlanner.loadPathGroup(fileName, new PathConstraints(maxVel, maxAccel)); 
 
-        return autoBuilder.fullAuto(group); 
+        addAuto(name, autoBuilder.fullAuto(group)); 
     }
 
     // add a pathplanner auto based on file name with default acceleration and velocity constraints
-    public Command addPPSwerveAuto(String name, String fileName) {
-        return addPPSwerveAuto(name, fileName, Constants.Trajectory.kMaxVelocityMetersPerSecond, Constants.Trajectory.kMaxAccelerationMetersPerSecondSquared); 
+    public void addPPSwerveAuto(String name, String fileName) {
+        addPPSwerveAuto(name, fileName, Constants.Trajectory.kMaxVelocityMetersPerSecond, Constants.Trajectory.kMaxAccelerationMetersPerSecondSquared); 
     }
 
     // gets the currently selected auto
