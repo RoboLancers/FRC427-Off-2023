@@ -13,7 +13,7 @@ public class Balance extends CommandBase {
         Constants.BalanceAutoConstants.kBalance_I, 
         Constants.BalanceAutoConstants.kBalance_D
     );
-
+    // Establishes the drivetrain, continuous inputs and the tolerance constants
 public Balance(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     m_BalancePID.enableContinuousInput(-180, 180);
@@ -41,7 +41,7 @@ public Balance(Drivetrain drivetrain) {
     }
 
     public void end(boolean interrupted) {
-        // tells the bot to STOP MOVING when alls done
+        // tells the bot to STOP MOVING when alls done :)
         m_drivetrain.swerveDrive(0, 0, 0);
     }
 }
