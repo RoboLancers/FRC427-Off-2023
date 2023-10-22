@@ -29,28 +29,28 @@ public final class Constants {
   public static class DrivetrainConstants {
     // Swerve IDs
     public static class FrontLeft {
-      public static final int kRotate = 9; // turn motor CAN ID
-      public static final int kDrive = 2; // drive motor CAN ID
-      public static final int kRotEncoder = 10; // turn encoder CAN ID
+      public static final int kRotate = 3; // turn motor CAN ID
+      public static final int kDrive = 4; // drive motor CAN ID
+      public static final int kRotEncoder = 0; // turn encoder CAN ID
     }
     public static class FrontRight {
-      public static final int kRotate = 3; 
-      public static final int kDrive = 4; 
-      public static final int kRotEncoder = 11; 
-    }
-    public static class BackRight {
       public static final int kRotate = 5; 
       public static final int kDrive = 6; 
-      public static final int kRotEncoder = 12; 
+      public static final int kRotEncoder = 0; 
+    }
+    public static class BackRight {
+      public static final int kRotate = 7; 
+      public static final int kDrive = 8; 
+      public static final int kRotEncoder = 0; 
     }
     public static class BackLeft {
-      public static final int kRotate = 8; 
-      public static final int kDrive = 7; 
-      public static final int kRotEncoder = 13; 
+      public static final int kRotate = 1; 
+      public static final int kDrive = 2; 
+      public static final int kRotEncoder = 0; 
     }
 
     // Gearing & Conversions
-    public static final double kGearRatio = 6.8; // driving gear ratio of each swerve module
+    public static final double kGearRatio = 6.12; // driving gear ratio of each swerve module
     public static final double kWheelRadiusInches = 1.5; // radius of the wheels
     public static final double kMetersPerRot = Units.inchesToMeters(2 * Math.PI * kWheelRadiusInches / kGearRatio); // calculate the position conversion factor of the swerve drive encoder
     public static final double kMetersPerSecondPerRPM = kMetersPerRot / 60; // calculate the velocity conversion factor of the swerve drive encoder
@@ -60,8 +60,8 @@ public final class Constants {
     public static final double kDegreesPerSecondPerRPM = kDegreesPerRot / 60; // velocity conversion factor of the turn encoder 
 
     // Drivebase
-    public static final double kTrackWidthMeters = Units.inchesToMeters(17.5); // width of the robot
-    public static final double kWheelBaseMeters = Units.inchesToMeters(17.5); // length of the robot
+    public static final double kTrackWidthMeters = Units.inchesToMeters(28.0); // horizontal dist between wheels
+    public static final double kWheelBaseMeters = Units.inchesToMeters(28.0); // vertical dist between wheels
 
     // Kinematics
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
@@ -125,7 +125,7 @@ public final class Constants {
     public static final double kDrive_I = 0; 
     public static final double kDrive_D = 0;
 
-    // angualr PID (same as turn pid)
+    // angular PID (same as turn pid)
     public static final double kOmega_P = DrivetrainConstants.kTurn_P; 
     public static final double kOmega_I = DrivetrainConstants.kTurn_I; 
     public static final double kOmega_D = DrivetrainConstants.kTurn_D; 
@@ -137,9 +137,6 @@ public final class Constants {
     public static final double kMaxCentripetalAcceleration = 0.8; 
 
     public static final HashMap<String, Command> eventMap = new HashMap<>(); 
-
-    static {
-    }
   }
   
   public static class ArmConstants {
