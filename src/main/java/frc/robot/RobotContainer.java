@@ -13,7 +13,6 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.IntakeForTime;
 import frc.robot.subsystems.intake.commands.IntakeStop;
 import frc.robot.subsystems.intake.commands.OuttakeForTime;
-import frc.robot.subsystems.intake.commands.OuttakeStop;
 import frc.robot.subsystems.intake.commands.TakeIn;
 import frc.robot.subsystems.intake.commands.TakeOut;
 import frc.robot.util.DriverController;
