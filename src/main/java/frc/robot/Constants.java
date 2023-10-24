@@ -31,22 +31,22 @@ public final class Constants {
     public static class FrontLeft {
       public static final int kRotate = 3; // turn motor CAN ID
       public static final int kDrive = 4; // drive motor CAN ID
-      public static final int kRotEncoder = 0; // turn encoder CAN ID
+      public static final int kRotEncoder = 15; // turn encoder CAN ID
     }
     public static class FrontRight {
       public static final int kRotate = 5; 
       public static final int kDrive = 6; 
-      public static final int kRotEncoder = 0; 
+      public static final int kRotEncoder = 16; 
     }
     public static class BackRight {
       public static final int kRotate = 7; 
       public static final int kDrive = 8; 
-      public static final int kRotEncoder = 0; 
+      public static final int kRotEncoder = 13; 
     }
     public static class BackLeft {
       public static final int kRotate = 1; 
       public static final int kDrive = 2; 
-      public static final int kRotEncoder = 0; 
+      public static final int kRotEncoder = 14; 
     }
 
     // Gearing & Conversions
@@ -60,8 +60,8 @@ public final class Constants {
     public static final double kDegreesPerSecondPerRPM = kDegreesPerRot / 60; // velocity conversion factor of the turn encoder 
 
     // Drivebase
-    public static final double kTrackWidthMeters = Units.inchesToMeters(28.0); // horizontal dist between wheels
-    public static final double kWheelBaseMeters = Units.inchesToMeters(28.0); // vertical dist between wheels
+    public static final double kTrackWidthMeters = Units.inchesToMeters(23.0); // horizontal dist between wheels
+    public static final double kWheelBaseMeters = Units.inchesToMeters(23.0); // vertical dist between wheels
 
     // Kinematics
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
