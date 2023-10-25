@@ -3,22 +3,21 @@ package frc.robot.subsystems.intake.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.intake.Intake;
 
-public class TakeIn extends CommandBase {
+public class IntakeStop extends CommandBase {
      // declare how long to intake for and speed
     Intake m_intake;
     double m_speed;
 
      // establishes intake, speed,
-    public TakeIn(Intake intake, double speed) {
+    public IntakeStop(Intake intake) {
     this.m_intake = intake;
-    this.m_speed = speed;
 
         addRequirements(intake);
     }
     // starts intaking 
     public void initialize() {
         // runs when the command is FIRST STARTED
-        this.m_intake.intakeCube(m_speed);
+        m_intake.stopMotor();
     }
     // keeps intaking
     public void execute() {

@@ -2,16 +2,17 @@ package frc.robot.subsystems.intake.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.util.IOUtils;
 
-public class TakeIn extends CommandBase {
+public class TuneTakeIn extends CommandBase {
      // declare how long to intake for and speed
     Intake m_intake;
     double m_speed;
 
      // establishes intake, speed,
-    public TakeIn(Intake intake, double speed) {
+    public TuneTakeIn(Intake intake) {
     this.m_intake = intake;
-    this.m_speed = speed;
+    this.m_speed = IOUtils.get("tune_Intake_Speed");
 
         addRequirements(intake);
     }

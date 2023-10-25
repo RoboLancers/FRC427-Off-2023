@@ -4,7 +4,17 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.commands.GoToAngle;
+import frc.robot.subsystems.arm.commands.GoToGround;
+import frc.robot.subsystems.arm.commands.GoToHardStop;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.commands.IntakeForTime;
+import frc.robot.subsystems.intake.commands.IntakeStop;
+import frc.robot.subsystems.intake.commands.OuttakeForTime;
+import frc.robot.subsystems.intake.commands.TakeIn;
+import frc.robot.subsystems.intake.commands.TakeOut;
 import frc.robot.util.DriverController;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -26,13 +36,20 @@ public class RobotContainer {
   // drivetrain of the robot
   private final Drivetrain drivetrain = new Drivetrain();
 
+  //intake of the robot
+  private final Intake intake = new Intake();
+
+  //arm of the robot
+  private final Arm arm = new Arm();
+
   // controller for the driver
   private final DriverController driverController =
       new DriverController(0);
+                                                                                    //cocntroler ID
+  private final CommandXboxController manipulatorController = new CommandXboxController(1); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
     autoPicker = new AutoPicker(drivetrain); 
     // Configure the trigger bindings
     configureBindings();
@@ -58,12 +75,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    manipulatorController.a().onTrue(new TakeIn(intake, 1));
+    manipulatorController.a().onFalse(new IntakeStop(intake));
+    manipulatorController.b().onTrue(new TakeOut(intake, 1));
+    manipulatorController.b().onFalse(new IntakeStop(intake));
+    manipulatorController.x().onTrue(new GoToGround(arm));
+    manipulatorController.x().onFalse(new GoToHardStop(arm));
+    //manipulatorController.y().onFalse(new );
   }
-
   // send any data as needed to the dashboard
   public void doSendables() {
 
+  }
+
+  public void addEvents() {
+    
   }
 
   // givess the currently picked auto as the chosen auto for the match

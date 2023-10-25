@@ -160,14 +160,22 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int IntakeMotorId = 1;
+    public static final int kIntakeMotorId = 1;
+    public static final int kIntakeMotorId2 = 2;
 
-    public static final int IntakeMotorId2 = 2;
-
-    public static final int IntakeMotorlimit = 40;
+    public static final int kIntakeMotorlimit = 40;
     
-    public static final boolean IntakeInversionState1 = true;
+    public static final boolean kIntakeInversionState1 = true;
+    public static final boolean kIntakeInversionState2 = true;
+  }
 
-    public static final boolean IntakeInversionState2 = true;
+  public static class BalanceAutoConstants {
+    public static final double kBalance_P = 0;
+    public static final double kBalance_I = 0;
+    public static final double kBalance_D = 0;
+    public static final double kBalanceErrorThreshold = 0;
+    ;
+
+
   }
 }
