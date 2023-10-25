@@ -16,7 +16,9 @@ public class Arm extends SubsystemBase {
     
 
     //Initializing motors; defining encoders; defining PID controllers; defining feedforward
-    CANSparkMax m_armMotor = new CANSparkMax(0, MotorType.kBrushless);
+    CANSparkMax m_armMotor = new CANSparkMax(Constants.ArmConstants.kArmMotorId
+    , MotorType.kBrushless);
+    
     RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
     public SparkMaxPIDController m_ArmPIDController = m_armMotor.getPIDController();
     public ArmFeedforward m_feedForward = new ArmFeedforward(Constants.ArmConstants.kS, Constants.ArmConstants.kV, Constants.ArmConstants.kG, Constants.ArmConstants.kA);
@@ -55,11 +57,6 @@ public class Arm extends SubsystemBase {
     
    public boolean isAtAngle() {
     // checks if position is good or not
-    if (m_armEncoder.getPosition()<m_targetPosition+Constants.ArmConstants.kAngleError && m_armEncoder.getPosition()>m_targetPosition-Constants.ArmConstants.kAngleError) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return (Math.abs(m_armEncoder.getPosition()) < Constants.ArmConstants.kAngleError);
    }
 }

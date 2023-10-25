@@ -18,30 +18,23 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
     // put motors & stuff here
-    CANSparkMax m_intakeMotor = new CANSparkMax(Constants.IntakeConstants.kIntakeMotorId, MotorType.kBrushless);
-    RelativeEncoder m_intakeEncoder = m_intakeMotor.getEncoder();
+    CANSparkMax m_intakeMotorRight = new CANSparkMax(Constants.IntakeConstants.kIntakeMotorRightId, MotorType.kBrushless);
+    RelativeEncoder m_intakeEncoderRight = m_intakeMotorRight.getEncoder();
 
-    CANSparkMax m_intakeMotor2 = new CANSparkMax(Constants.IntakeConstants.kIntakeMotorId2, MotorType.kBrushless);
-    RelativeEncoder m_intakeEncoder2 = m_intakeMotor.getEncoder();
+    CANSparkMax m_intakeMotorLeft = new CANSparkMax(Constants.IntakeConstants.kIntakeMotorLeftId, MotorType.kBrushless);
+    RelativeEncoder m_intakeEncoderLeft = m_intakeMotorLeft.getEncoder();
+    
+    
     public Intake() {
-
     }
 
     public void setupMotors() {
-        // set up motors
-        /*
-         * 
-         (put all constants in Constants.java)
-         - set motor inversion
-         - set smart current limit (usually 40 is good)
-         - set position & velocity conversion factor
-         */
-        m_intakeMotor.setInverted(Constants.IntakeConstants.kIntakeInversionState1);
-        m_intakeMotor.setSmartCurrentLimit(Constants.IntakeConstants.kIntakeMotorlimit);
+        m_intakeMotorRight.setInverted(Constants.IntakeConstants.kRightIntakeInverted);
+        m_intakeMotorRight.setSmartCurrentLimit(Constants.IntakeConstants.kIntakeMotorlimit);
 
-        m_intakeMotor2.setInverted(Constants.IntakeConstants.kIntakeInversionState2);
-        m_intakeMotor2.setSmartCurrentLimit(Constants.IntakeConstants.kIntakeMotorlimit);
-        m_intakeMotor2.follow(m_intakeMotor);
+        m_intakeMotorLeft.setInverted(Constants.IntakeConstants.kLeftIntakeInverted);
+        m_intakeMotorLeft.setSmartCurrentLimit(Constants.IntakeConstants.kIntakeMotorlimit);
+        m_intakeMotorLeft.follow(m_intakeMotorRight);
     }
 
     public void periodic() {
@@ -49,12 +42,12 @@ public class Intake extends SubsystemBase {
         
     }
     public void intakeCube(double speed){
-        m_intakeMotor.set(speed);
+        m_intakeMotorRight.set(speed);
     }
     public void outtake(double speed){
-        m_intakeMotor.set(-speed);
+        m_intakeMotorRight.set(-speed);
     }
     public void stopMotor(){
-        m_intakeMotor.set(0);
+        m_intakeMotorRight.set(0);
     }
 }

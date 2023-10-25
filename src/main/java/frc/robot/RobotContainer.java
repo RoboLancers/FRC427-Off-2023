@@ -4,21 +4,15 @@
 
 package frc.robot;
 
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.commands.GoToAngle;
 import frc.robot.subsystems.arm.commands.GoToGround;
 import frc.robot.subsystems.arm.commands.GoToHardStop;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.commands.IntakeForTime;
 import frc.robot.subsystems.intake.commands.IntakeStop;
-import frc.robot.subsystems.intake.commands.OuttakeForTime;
 import frc.robot.subsystems.intake.commands.TakeIn;
 import frc.robot.subsystems.intake.commands.TakeOut;
 import frc.robot.util.DriverController;
-
-import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -48,12 +42,12 @@ public class RobotContainer {
   // controller for the driver
   private final DriverController driverController =
       new DriverController(0);
-                                                                                    //cocntroler ID
+
   private final CommandXboxController manipulatorController = new CommandXboxController(1); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    autoPicker = new AutoPicker(drivetrain); 
+    autoPicker = new AutoPicker(drivetrain, intake, arm); 
     // Configure the trigger bindings
     configureBindings();
 
@@ -82,10 +76,10 @@ public class RobotContainer {
     //manipulatorController.()onFalse(new IntakeStop(intake));
 
     new Trigger(() -> {
-      return manipulatorController.getLeftY() < 0.5; 
+      return manipulatorController.getLeftY() < -0.5; 
     })
-      .whileTrue(new TakeIn(intake, Constants.IntakeConstants.kMonkeyDLuffySpeed))
-      .whileFalse(new IntakeStop(intake)); 
+      .onTrue(new TakeIn(intake, Constants.IntakeConstants.kIntakeSpeed))
+      .onFalse(new IntakeStop(intake)); 
 
     manipulatorController.y().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedHigh));
     manipulatorController.y().onFalse(new IntakeStop(intake));
@@ -98,19 +92,15 @@ public class RobotContainer {
 
     manipulatorController.rightTrigger().onTrue(new GoToGround(arm));
     manipulatorController.rightTrigger().onFalse(new GoToHardStop(arm));
-    //manipulatorController.y().onFalse(new );
   }
   // send any data as needed to the dashboard
   public void doSendables() {
 
   }
 
-  public void addEvents() {
-    
-  }
-
   // givess the currently picked auto as the chosen auto for the match
   public Command getAutonomousCommand() {
-    return autoPicker.getAuto(); 
+    return autoPicker.getAuto();
+    // return new SwerveTurnTunerCommand(7, 8, 13); 
   }
 }
