@@ -13,10 +13,11 @@ import frc.robot.subsystems.intake.commands.IntakeStop;
 import frc.robot.subsystems.intake.commands.TakeIn;
 import frc.robot.subsystems.intake.commands.TakeOut;
 import frc.robot.util.DriverController;
-
+import frc.robot.util.DriverController.Mode;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -75,9 +76,11 @@ public class RobotContainer {
     //manipulatorController.().onTrue(new TakeIn(intake, 1));
     //manipulatorController.()onFalse(new IntakeStop(intake));
 
-    new Trigger(() -> {
-      return manipulatorController.getLeftY() < -0.5; 
-    })
+    driverController.RightTrigger
+      .onTrue(new InstantCommand(() -> driverController.setSlowMode(Mode.SLOW)))
+      .onFalse(new InstantCommand(() -> driverController.setSlowMode(Mode.NORMAL))); 
+
+    new Trigger(() -> manipulatorController.getLeftY() < -0.5)
       .onTrue(new TakeIn(intake, Constants.IntakeConstants.kIntakeSpeed))
       .onFalse(new IntakeStop(intake)); 
 

@@ -15,17 +15,16 @@ public class DriverController extends Controller {
 
     private double deadzone; 
 
-    private Supplier<ChassisSpeeds> chassisSpeedsSupplier = () -> null; 
-    private Supplier<Double> maxSpeed = () -> Constants.DrivetrainConstants.kMaxSpeedMetersPerSecond; 
-    private Supplier<Double> maxRotation = () -> Constants.DrivetrainConstants.kMaxRotationRadPerSecond; 
-
-    // TODO: refactor
     public enum Mode {
         NORMAL,
         SLOW
     }
     
-    private Mode mode;
+    private Mode mode = Mode.NORMAL;
+
+    private Supplier<ChassisSpeeds> chassisSpeedsSupplier = () -> null; 
+    private Supplier<Double> maxSpeed = () -> mode == Mode.NORMAL ? Constants.DrivetrainConstants.kMaxSpeedMetersPerSecond : Constants.DrivetrainConstants.kMaxSlowSpeedMetersPerSecond;   
+    private Supplier<Double> maxRotation = () -> mode == Mode.NORMAL ? Constants.DrivetrainConstants.kMaxRotationRadPerSecond : Constants.DrivetrainConstants.kMaxSlowRotationRadPerSecond; 
 
     public DriverController(int port) {
         this(port, 0.05); 
@@ -89,6 +88,10 @@ public class DriverController extends Controller {
     
     public Mode getSlowMode() {
         return this.mode; 
+    }
+
+    public void setSlowMode(Mode mode) {
+        this.mode = mode; 
     }
 
     public void setChassisSpeedsSupplier(Supplier<ChassisSpeeds> s) {
