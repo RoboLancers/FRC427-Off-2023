@@ -96,9 +96,9 @@ public final class Constants {
 
     // found from sysid for one of the turn modules or tune by yourself
     // turn PID values for a swerve module
-    public static final double kModuleTurn_P = 0; 
+    public static final double kModuleTurn_P = 0.01; 
     public static final double kModuleTurn_I = 0; 
-    public static final double kModuleTurn_D = 0; 
+    public static final double kModuleTurn_D = 0.0001; 
 
     // turn in place PID for the whole robot
     public static final double kTurn_P = 0; 
@@ -140,6 +140,7 @@ public final class Constants {
   }
   
   public static class ArmConstants {
+    public static final int kArmMotorId = 0;
     public static double kFF = 0;
     public static final double kS = 0;
     public static final double kV = 0;
@@ -160,13 +161,13 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int kIntakeMotorId = 1;
-    public static final int kIntakeMotorId2 = 2;
+    public static final int kIntakeMotorRightId = 1;
+    public static final int kIntakeMotorLeftId = 2;
 
     public static final int kIntakeMotorlimit = 40;
     
-    public static final boolean kIntakeInversionState1 = true;
-    public static final boolean kIntakeInversionState2 = true;
+    public static final boolean kIntakeRightInversionState = true;
+    public static final boolean kIntakeLeftInversionState = true;
   }
 
   public static class BalanceAutoConstants {

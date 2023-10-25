@@ -42,8 +42,3 @@ public class TuneGoToAngle extends CommandBase {
         // runs when the command is ended
     }
 }
-
-
-
-//Make arm go to angle
-//arm to hard stop, arm to ground 

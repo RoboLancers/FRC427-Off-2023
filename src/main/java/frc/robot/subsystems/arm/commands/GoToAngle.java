@@ -18,8 +18,6 @@ public class GoToAngle extends CommandBase {
     public void initialize() {
         // makes arm go to angle
         m_arm.goToAngle(m_angle);
-        
-        
 
     }
 
@@ -36,8 +34,3 @@ public class GoToAngle extends CommandBase {
         // runs when the command is ended
     }
 }
-
-
-
-//Make arm go to angle
-//arm to hard stop, arm to ground 
