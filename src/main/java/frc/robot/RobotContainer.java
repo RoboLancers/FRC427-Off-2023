@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // private final AutoPicker autoPicker; 
+  private final AutoPicker autoPicker; 
 
   // drivetrain of the robot
   private final Drivetrain drivetrain = new Drivetrain();
@@ -46,12 +46,12 @@ public class RobotContainer {
   // controller for the driver
   private final DriverController driverController =
       new DriverController(0);
-                                                                                    //controler ID
+
   private final CommandXboxController manipulatorController = new CommandXboxController(1); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // autoPicker = new AutoPicker(drivetrain); 
+    autoPicker = new AutoPicker(drivetrain, null, null); // TODO: add intake and arm as they come
     // Configure the trigger bindings
     configureBindings();
 
@@ -95,8 +95,7 @@ public class RobotContainer {
 
   // givess the currently picked auto as the chosen auto for the match
   public Command getAutonomousCommand() {
-    // return autoPicker.getAuto();
-    return null;  
+    return autoPicker.getAuto();
     // return new SwerveTurnTunerCommand(7, 8, 13); 
   }
 }

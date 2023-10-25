@@ -41,7 +41,6 @@ public class AutoPicker extends CommandBase  {
         // see PathPlanner
         
         autoBuilder = new SwerveAutoBuilder(
-
             driveSubsystem::getPose, // Pose2d supplier
             driveSubsystem::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
             Constants.DrivetrainConstants.kDriveKinematics, // SwerveDriveKinematics
@@ -51,8 +50,7 @@ public class AutoPicker extends CommandBase  {
             Constants.Trajectory.eventMap,
             true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
             driveSubsystem // The drive subsystem. Used to properly set the requirements of path following commands
-            
-            );
+        );
 
 
     }
