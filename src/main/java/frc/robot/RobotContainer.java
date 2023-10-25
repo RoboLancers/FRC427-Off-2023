@@ -4,16 +4,12 @@
 
 package frc.robot;
 
-import frc.robot.commands.SwerveTurnTunerCommand;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.commands.GoToAngle;
 import frc.robot.subsystems.arm.commands.GoToGround;
 import frc.robot.subsystems.arm.commands.GoToHardStop;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.commands.IntakeForTime;
 import frc.robot.subsystems.intake.commands.IntakeStop;
-import frc.robot.subsystems.intake.commands.OuttakeForTime;
 import frc.robot.subsystems.intake.commands.TakeIn;
 import frc.robot.subsystems.intake.commands.TakeOut;
 import frc.robot.util.DriverController;
@@ -32,26 +28,26 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // private final AutoPicker autoPicker; 
+  private final AutoPicker autoPicker; 
 
   // drivetrain of the robot
   private final Drivetrain drivetrain = new Drivetrain();
 
   //intake of the robot
-  // private final Intake intake = new Intake();
+  private final Intake intake = new Intake();
 
   //arm of the robot
-  // private final Arm arm = new Arm();
+  private final Arm arm = new Arm();
 
   // controller for the driver
   private final DriverController driverController =
       new DriverController(0);
-                                                                                    //controler ID
+
   private final CommandXboxController manipulatorController = new CommandXboxController(1); 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // autoPicker = new AutoPicker(drivetrain); 
+    autoPicker = new AutoPicker(drivetrain, intake, arm); 
     // Configure the trigger bindings
     configureBindings();
 
@@ -76,27 +72,35 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // manipulatorController.a().onTrue(new TakeIn(intake, 1));
-    // manipulatorController.a().onFalse(new IntakeStop(intake));
-    // manipulatorController.b().onTrue(new TakeOut(intake, 1));
-    // manipulatorController.b().onFalse(new IntakeStop(intake));
-    // manipulatorController.x().onTrue(new GoToGround(arm));
-    // manipulatorController.x().onFalse(new GoToHardStop(arm));
-    //manipulatorController.y().onFalse(new );
+    //manipulatorController.().onTrue(new TakeIn(intake, 1));
+    //manipulatorController.()onFalse(new IntakeStop(intake));
+
+    new Trigger(() -> {
+      return manipulatorController.getLeftY() < -0.5; 
+    })
+      .onTrue(new TakeIn(intake, Constants.IntakeConstants.kIntakeSpeed))
+      .onFalse(new IntakeStop(intake)); 
+
+    manipulatorController.y().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedHigh));
+    manipulatorController.y().onFalse(new IntakeStop(intake));
+
+    manipulatorController.b().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedMid));
+    manipulatorController.b().onFalse(new IntakeStop(intake));
+
+    manipulatorController.a().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedLow));
+    manipulatorController.a().onFalse(new IntakeStop(intake));
+
+    manipulatorController.rightTrigger().onTrue(new GoToGround(arm));
+    manipulatorController.rightTrigger().onFalse(new GoToHardStop(arm));
   }
   // send any data as needed to the dashboard
   public void doSendables() {
 
   }
 
-  public void addEvents() {
-    
-  }
-
   // givess the currently picked auto as the chosen auto for the match
   public Command getAutonomousCommand() {
-    // return autoPicker.getAuto();
-    return null;  
+    return autoPicker.getAuto();
     // return new SwerveTurnTunerCommand(7, 8, 13); 
   }
 }

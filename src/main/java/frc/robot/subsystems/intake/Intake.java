@@ -29,18 +29,10 @@ public class Intake extends SubsystemBase {
     }
 
     public void setupMotors() {
-        // set up motors
-        /*
-         * 
-         (put all constants in Constants.java)
-         - set motor inversion
-         - set smart current limit (usually 40 is good)
-         - set position & velocity conversion factor
-         */
-        m_intakeMotorRight.setInverted(Constants.IntakeConstants.kIntakeRightInversionState);
+        m_intakeMotorRight.setInverted(Constants.IntakeConstants.kRightIntakeInverted);
         m_intakeMotorRight.setSmartCurrentLimit(Constants.IntakeConstants.kIntakeMotorlimit);
 
-        m_intakeMotorLeft.setInverted(Constants.IntakeConstants.kIntakeLeftInversionState);
+        m_intakeMotorLeft.setInverted(Constants.IntakeConstants.kLeftIntakeInverted);
         m_intakeMotorLeft.setSmartCurrentLimit(Constants.IntakeConstants.kIntakeMotorlimit);
         m_intakeMotorLeft.follow(m_intakeMotorRight);
     }

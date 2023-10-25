@@ -166,8 +166,14 @@ public final class Constants {
 
     public static final int kIntakeMotorlimit = 40;
     
-    public static final boolean kIntakeRightInversionState = true;
-    public static final boolean kIntakeLeftInversionState = true;
+    public static final boolean kRightIntakeInverted = true;
+    public static final boolean kLeftIntakeInverted = true;
+
+    public static final double kShootSpeedHigh = 1;
+    public static final double kShootSpeedMid = 0.5;
+    public static final double kShootSpeedLow = 0.1;
+
+    public static final double kIntakeSpeed = 1;
   }
 
   public static class BalanceAutoConstants {
