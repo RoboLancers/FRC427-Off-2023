@@ -170,6 +170,12 @@ public final class Constants {
     
     public static final boolean kIntakeInversionState1 = true;
     public static final boolean kIntakeInversionState2 = true;
+
+    public static final double kShootSpeedHigh = 1;
+    public static final double kShootSpeedMid = 0.5;
+    public static final double kShootSpeedLow = 0.1;
+
+    public static final double kMonkeyDLuffySpeed = 1;
   }
 
   public static class BalanceAutoConstants {

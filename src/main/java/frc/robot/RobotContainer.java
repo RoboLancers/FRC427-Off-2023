@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.commands.GoToAngle;
 import frc.robot.subsystems.arm.commands.GoToGround;
@@ -13,10 +14,11 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.IntakeForTime;
 import frc.robot.subsystems.intake.commands.IntakeStop;
 import frc.robot.subsystems.intake.commands.OuttakeForTime;
-import frc.robot.subsystems.intake.commands.OuttakeStop;
 import frc.robot.subsystems.intake.commands.TakeIn;
 import frc.robot.subsystems.intake.commands.TakeOut;
 import frc.robot.util.DriverController;
+
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -76,12 +78,26 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    manipulatorController.a().onTrue(new TakeIn(intake, 1));
-    manipulatorController.a().onFalse(new IntakeStop(intake));
-    manipulatorController.b().onTrue(new TakeOut(intake, 1));
+    //manipulatorController.().onTrue(new TakeIn(intake, 1));
+    //manipulatorController.()onFalse(new IntakeStop(intake));
+
+    new Trigger(() -> {
+      return manipulatorController.getLeftY() < 0.5; 
+    })
+      .whileTrue(new TakeIn(intake, Constants.IntakeConstants.kMonkeyDLuffySpeed))
+      .whileFalse(new IntakeStop(intake)); 
+
+    manipulatorController.y().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedHigh));
+    manipulatorController.y().onFalse(new IntakeStop(intake));
+
+    manipulatorController.b().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedMid));
     manipulatorController.b().onFalse(new IntakeStop(intake));
-    manipulatorController.x().onTrue(new GoToGround(arm));
-    manipulatorController.x().onFalse(new GoToHardStop(arm));
+
+    manipulatorController.a().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedLow));
+    manipulatorController.a().onFalse(new IntakeStop(intake));
+
+    manipulatorController.rightTrigger().onTrue(new GoToGround(arm));
+    manipulatorController.rightTrigger().onFalse(new GoToHardStop(arm));
     //manipulatorController.y().onFalse(new );
   }
   // send any data as needed to the dashboard
