@@ -18,14 +18,14 @@ public class Arm extends SubsystemBase {
     //Initializing motors; defining encoders; defining PID controllers; defining feedforward
     CANSparkMax m_armMotor = new CANSparkMax(0, MotorType.kBrushless);
     RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
-    SparkMaxPIDController m_ArmPIDController = m_armMotor.getPIDController();
-    ArmFeedforward m_feedForward = new ArmFeedforward(Constants.ArmConstants.kS, Constants.ArmConstants.kV, Constants.ArmConstants.kG, Constants.ArmConstants.kA);
+    public SparkMaxPIDController m_ArmPIDController = m_armMotor.getPIDController();
+    public ArmFeedforward m_feedForward = new ArmFeedforward(Constants.ArmConstants.kS, Constants.ArmConstants.kV, Constants.ArmConstants.kG, Constants.ArmConstants.kA);
     
 
     public Arm() {
         // calculations for feedforward
         setupMotors();
-        m_feedForward.calculate(m_targetPosition, m_targetPosition);
+        m_feedForward.calculate(m_targetPosition, m_velocity);
     }
 
     public void setupMotors() {

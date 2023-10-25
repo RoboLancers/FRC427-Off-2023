@@ -18,10 +18,10 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
     // put motors & stuff here
-    CANSparkMax m_intakeMotor = new CANSparkMax(Constants.IntakeConstants.IntakeMotorId, MotorType.kBrushless);
+    CANSparkMax m_intakeMotor = new CANSparkMax(Constants.IntakeConstants.kIntakeMotorId, MotorType.kBrushless);
     RelativeEncoder m_intakeEncoder = m_intakeMotor.getEncoder();
 
-    CANSparkMax m_intakeMotor2 = new CANSparkMax(Constants.IntakeConstants.IntakeMotorId2, MotorType.kBrushless);
+    CANSparkMax m_intakeMotor2 = new CANSparkMax(Constants.IntakeConstants.kIntakeMotorId2, MotorType.kBrushless);
     RelativeEncoder m_intakeEncoder2 = m_intakeMotor.getEncoder();
     public Intake() {
 
@@ -36,11 +36,11 @@ public class Intake extends SubsystemBase {
          - set smart current limit (usually 40 is good)
          - set position & velocity conversion factor
          */
-        m_intakeMotor.setInverted(Constants.IntakeConstants.IntakeInversionState1);
-        m_intakeMotor.setSmartCurrentLimit(Constants.IntakeConstants.IntakeMotorlimit);
+        m_intakeMotor.setInverted(Constants.IntakeConstants.kIntakeInversionState1);
+        m_intakeMotor.setSmartCurrentLimit(Constants.IntakeConstants.kIntakeMotorlimit);
 
-        m_intakeMotor2.setInverted(Constants.IntakeConstants.IntakeInversionState2);
-        m_intakeMotor2.setSmartCurrentLimit(Constants.IntakeConstants.IntakeMotorlimit);
+        m_intakeMotor2.setInverted(Constants.IntakeConstants.kIntakeInversionState2);
+        m_intakeMotor2.setSmartCurrentLimit(Constants.IntakeConstants.kIntakeMotorlimit);
         m_intakeMotor2.follow(m_intakeMotor);
     }
 
