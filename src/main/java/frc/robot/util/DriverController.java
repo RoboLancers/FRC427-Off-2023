@@ -54,34 +54,35 @@ public class DriverController extends Controller {
         return ControllerUtils.applyDeadband(super.getRightStickY(), deadzone);
     }
 
-    public ChassisSpeeds getDesiredChassisSpeeds() {
+    public ChassisState getDesiredChassisState() {
         // deadzone-only values
         double throttleForward = -getLeftStickY();
         double throttleStrafe = -getLeftStickX();
-        double throttleTurn = -getRightStickX(); 
+        double turnX = -getRightStickX(); 
+        double turnY = -getRightStickY(); 
         
         double speedForward = ControllerUtils.squareKeepSign(throttleForward) * maxSpeed.get(); 
         double speedStrafe = ControllerUtils.squareKeepSign(throttleStrafe) * maxSpeed.get(); 
-        double speedTurn = ControllerUtils.squareKeepSign(throttleTurn) * maxRotation.get(); 
+        // double speedTurn = ControllerUtils.squareKeepSign(throttleTurn) * maxRotation.get(); 
 
-        // TODO: add in rate limiters
         // ChassisSpeeds speeds = new ChassisSpeeds(
         //     forwardRateLimiter.calculate(speedForward), 
         //     strafeRateLimiter.calculate(speedStrafe), 
         //     turnRateLimiter.calculate(speedTurn)
         // ); 
-        ChassisSpeeds speeds = new ChassisSpeeds(
-            speedForward, 
-            speedStrafe, 
-            speedTurn
+        ChassisState speeds = new ChassisState(
+            forwardRateLimiter.calculate(speedForward), 
+            strafeRateLimiter.calculate(speedStrafe), 
+            Math.atan2(turnX, turnY), // speedTurn
+            turnY != 0 || turnX != 0
         ); 
 
-        ChassisSpeeds oldSpeeds = chassisSpeedsSupplier.get(); 
-        if (oldSpeeds != null) {
-            forwardRateLimiter.reset(oldSpeeds.vxMetersPerSecond);
-            strafeRateLimiter.reset(oldSpeeds.vyMetersPerSecond);
-            turnRateLimiter.reset(oldSpeeds.omegaRadiansPerSecond);
-        }
+        // ChassisSpeeds oldSpeeds = chassisSpeedsSupplier.get(); 
+        // if (oldSpeeds != null) {
+        //     forwardRateLimiter.reset(oldSpeeds.vxMetersPerSecond);
+        //     strafeRateLimiter.reset(oldSpeeds.vyMetersPerSecond);
+        //     turnRateLimiter.reset(oldSpeeds.omegaRadiansPerSecond);
+        // }
 
         return speeds;  
     }

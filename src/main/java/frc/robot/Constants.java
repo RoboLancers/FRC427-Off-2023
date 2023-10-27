@@ -51,7 +51,7 @@ public final class Constants {
 
     // Gearing & Conversions
     public static final double kGearRatio = 6.12; // driving gear ratio of each swerve module
-    public static final double kWheelRadiusInches = 1.5; // radius of the wheels
+    public static final double kWheelRadiusInches = 2; // radius of the wheels
     public static final double kMetersPerRot = Units.inchesToMeters(2 * Math.PI * kWheelRadiusInches / kGearRatio); // calculate the position conversion factor of the swerve drive encoder
     public static final double kMetersPerSecondPerRPM = kMetersPerRot / 60; // calculate the velocity conversion factor of the swerve drive encoder
 
@@ -79,7 +79,7 @@ public final class Constants {
     Math.hypot(kTrackWidthMeters / 2.0, kWheelBaseMeters / 2.0); // max rotation of robot
     
     // TODO: tune these
-    public static final double kMaxSpeedMetersPerSecond = 2.5; // max velocity (no turning) of robot; may tune to be a fraction of the attainable module speed
+    public static final double kMaxSpeedMetersPerSecond = 2.0; // max velocity (no turning) of robot; may tune to be a fraction of the attainable module speed
     public static final double kMaxSlowSpeedMetersPerSecond = 1.0; 
     public static final double kMaxAccelerationMetersPerSecondSquared = kMaxSpeedMetersPerSecond / 1.0; // max acceleration of robot (accelerate to max speed in 1 second)
     public static final double kMaxRotationRadPerSecond = Math.PI; // max rotation speed of the robot
@@ -92,9 +92,10 @@ public final class Constants {
     public static final double kaVoltSecondsSquaredPerMeter = 0; 
 
     // drive speed PID values for a swerve module
-    public static final double kModuleDrive_P = 0; 
+    public static final double kModuleDrive_P = 6.8901E-06; 
     public static final double kModuleDrive_I = 0; 
     public static final double kModuleDrive_D = 0; 
+    public static final double kModuleDrive_FF = 0.31;
 
     // found from sysid for one of the turn modules or tune by yourself
     // turn PID values for a swerve module
@@ -103,11 +104,11 @@ public final class Constants {
     public static final double kModuleTurn_D = 0.0001; 
 
     // turn in place PID for the whole robot
-    public static final double kTurn_P = 0; 
+    public static final double kTurn_P = 0.054; 
     public static final double kTurn_I = 0; 
-    public static final double kTurn_D = 0; 
+    public static final double kTurn_D = 0.001; 
     public static final double kTurn_FF = 0; 
-    public static final double kTurnErrorThreshold = 0; 
+    public static final double kTurnErrorThreshold = 2.0; 
     public static final double kTurnVelocityThreshold = 0; 
 
     // TODO: tune these but it should be fine
@@ -123,18 +124,18 @@ public final class Constants {
 
   public static class Trajectory {
     // translational PID of robot for trajectory use
-    public static final double kDrive_P = 0; 
+    public static final double kDrive_P = 2.25; 
     public static final double kDrive_I = 0; 
     public static final double kDrive_D = 0;
 
     // angular PID (same as turn pid)
-    public static final double kOmega_P = DrivetrainConstants.kTurn_P; 
-    public static final double kOmega_I = DrivetrainConstants.kTurn_I; 
-    public static final double kOmega_D = DrivetrainConstants.kTurn_D; 
+    public static final double kOmega_P = 3.24; 
+    public static final double kOmega_I = 0; 
+    public static final double kOmega_D = 0; 
 
-    // max velocity & acceleration robot can go when following a trajectory
-    public static final double kMaxVelocityMetersPerSecond = 3.21; 
-    public static final double kMaxAccelerationMetersPerSecondSquared = 2.54; 
+    // max velocity & acceleration robot can go n following a trajectory
+    public static final double kMaxVelocityMetersPerSecond = 1; 
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1; 
 
     public static final double kMaxCentripetalAcceleration = 0.8; 
 
@@ -142,7 +143,7 @@ public final class Constants {
   }
   
   public static class ArmConstants {
-    public static final int kArmMotorId = 0;
+    public static final int kArmMotorId = 9;
     public static double kFF = 0;
     public static final double kS = 0;
     public static final double kV = 0;
@@ -163,8 +164,8 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int kIntakeMotorRightId = 1;
-    public static final int kIntakeMotorLeftId = 2;
+    public static final int kIntakeMotorRightId = 10;
+    public static final int kIntakeMotorLeftId = 11;
 
     public static final int kIntakeMotorlimit = 40;
     
@@ -179,11 +180,10 @@ public final class Constants {
   }
 
   public static class BalanceAutoConstants {
-    public static final double kBalance_P = 0;
+    public static final double kBalance_P = 0.02;
     public static final double kBalance_I = 0;
     public static final double kBalance_D = 0;
-    public static final double kBalanceErrorThreshold = 0;
-    ;
+    public static final double kBalanceErrorThreshold = 1;
 
 
   }

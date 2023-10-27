@@ -10,18 +10,12 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.commands.Balance;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.commands.GoToGround;
-import frc.robot.subsystems.arm.commands.GoToHardStop;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.commands.IntakeForTime;
-import frc.robot.subsystems.intake.commands.OuttakeForTime;
 
 // class to store, set up, and choose autos
-public class AutoPicker extends CommandBase  {
+public class AutoPicker {
     private SendableChooser<Command> chooser = new SendableChooser<>();
 
     private SwerveAutoBuilder autoBuilder;
@@ -35,9 +29,9 @@ public class AutoPicker extends CommandBase  {
         m_intakeSubsystem = intakeSubsystem;
         m_driveSubsystem = driveSubsystem;
 
-        addRequirements(driveSubsystem);
-        addRequirements(intakeSubsystem);
-        addRequirements(driveSubsystem);
+        // addRequirements(driveSubsystem);
+        // addRequirements(intakeSubsystem);
+        // addRequirements(driveSubsystem);
 
         // see PathPlanner
         
@@ -53,25 +47,26 @@ public class AutoPicker extends CommandBase  {
             driveSubsystem // The drive subsystem. Used to properly set the requirements of path following commands
         );
 
-
+        addEvents();
+        addAutos();
     }
 
     public void addEvents() {
         // eg. addEvent("intake_cube", new IntakeForTime(intake, 1, 2)); 
-        addEvent("score_cube", new OuttakeForTime(m_intakeSubsystem, Constants.IntakeConstants.kShootSpeedHigh, 2));
-        addEvent("put_arm_down", new GoToGround(m_ArmSubsystem));
-        addEvent("put_arm up", new GoToHardStop(m_ArmSubsystem));
-        addEvent("intake_cube", new IntakeForTime(m_intakeSubsystem, Constants.IntakeConstants.kIntakeSpeed, 2));
-        addEvent("balance_auto", new Balance(m_driveSubsystem));
+        // addEvent("score_cube", new OuttakeForTime(m_intakeSubsystem, Constants.IntakeConstants.kShootSpeedHigh, 2));
+        // addEvent("put_arm_down", new GoToGround(m_ArmSubsystem));
+        // addEvent("put_arm_up", new GoToHardStop(m_ArmSubsystem));
+        // addEvent("intake_cube", new IntakeForTime(m_intakeSubsystem, Constants.IntakeConstants.kIntakeSpeed, 2));
+        // addEvent("balance_auto", new Balance(m_driveSubsystem));
 
     }
 
     public void addAutos() {
         // eg. addPPSwerveAuto("BalanceAuto", "Mid Lane Auto"); 
-        addPPSwerveAuto("FirstAuto", "TwoCubesAuto");
-        addPPSwerveAuto("SecondAuto", "BalanceAuto");
-        addPPSwerveAuto("ThirdAuto", "TaxiAuto");
-        addPPSwerveAuto("FourthAuto", "TestAuto");
+        addPPSwerveAuto("TwoCubesAuto");
+        addPPSwerveAuto("BalanceAuto");
+        addPPSwerveAuto("TaxiAuto");
+        addPPSwerveAuto("TestAuto");
     }
 
     public void addEvent(String key, Command command) {
@@ -84,19 +79,23 @@ public class AutoPicker extends CommandBase  {
     }
 
     // add a path planner auto based on file name
-    public void addPPSwerveAuto(String name, String fileName, double maxVel, double maxAccel) {
-        List<PathPlannerTrajectory> group = PathPlanner.loadPathGroup(fileName, new PathConstraints(maxVel, maxAccel)); 
+    public void addPPSwerveAuto(String autoName, double maxVel, double maxAccel) {
+        List<PathPlannerTrajectory> group = PathPlanner.loadPathGroup(autoName, new PathConstraints(maxVel, maxAccel)); 
 
-        addAuto(name, autoBuilder.fullAuto(group)); 
+        addAuto(autoName, autoBuilder.fullAuto(group)); 
     }
 
     // add a pathplanner auto based on file name with default acceleration and velocity constraints
-    public void addPPSwerveAuto(String name, String fileName) {
-        addPPSwerveAuto(name, fileName, Constants.Trajectory.kMaxVelocityMetersPerSecond, Constants.Trajectory.kMaxAccelerationMetersPerSecondSquared); 
+    public void addPPSwerveAuto(String autoName) {
+        addPPSwerveAuto(autoName, Constants.Trajectory.kMaxVelocityMetersPerSecond, Constants.Trajectory.kMaxAccelerationMetersPerSecondSquared); 
     }
 
     // gets the currently selected auto
     public Command getAuto() {
         return chooser.getSelected(); 
+    }
+
+    public SendableChooser<Command> getChooser() {
+        return chooser; 
     }
 }

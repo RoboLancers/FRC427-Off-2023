@@ -32,7 +32,9 @@ public TuneBalance(Drivetrain drivetrain) {
         // Calculates our current angle to the desired angle of 0. 
         // Then uses the calulated number in the PID to drive at certain speed to get to 0 degrees on the pad
     double speedOnDegree = m_BalancePID.calculate(m_drivetrain.gyro.getPitch(), m_BalancePID.getSetpoint());
-        m_drivetrain.swerveDrive(speedOnDegree, 0, 0);
+        m_drivetrain.swerveDrive(0, speedOnDegree, 0);
+        IOUtils.set("balance angle", m_drivetrain.gyro.getPitch());
+        IOUtils.set("balance output", speedOnDegree);
         m_BalancePID.setP(IOUtils.get("Balance P"));
         m_BalancePID.setI(IOUtils.get("Balance I"));
         m_BalancePID.setD(IOUtils.get("Balance D"));

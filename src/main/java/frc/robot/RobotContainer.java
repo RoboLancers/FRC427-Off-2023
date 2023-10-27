@@ -4,17 +4,15 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.commands.GoToGround;
-import frc.robot.subsystems.arm.commands.GoToHardStop;
+import frc.robot.commands.TuneBalance;
 import frc.robot.subsystems.drivetrain.Drivetrain;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.commands.IntakeStop;
-import frc.robot.subsystems.intake.commands.TakeIn;
-import frc.robot.subsystems.intake.commands.TakeOut;
+import frc.robot.subsystems.drivetrain.commands.TuneTurnToAngle;
+import frc.robot.util.ChassisState;
 import frc.robot.util.DriverController;
 import frc.robot.util.DriverController.Mode;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,10 +33,10 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
 
   //intake of the robot
-  private final Intake intake = new Intake();
+  // private final Intake intake = new Intake();
 
   //arm of the robot
-  private final Arm arm = new Arm();
+  // private final Arm arm = new Arm();
 
   // controller for the driver
   private final DriverController driverController =
@@ -48,18 +46,19 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    autoPicker = new AutoPicker(drivetrain, intake, arm); 
+    PathPlannerServer.startServer(5811);
+    autoPicker = new AutoPicker(drivetrain, null, null); 
     // Configure the trigger bindings
     configureBindings();
 
     // driverController.setChassisSpeedsSupplier(drivetrain::getChassisSpeeds); // comment in simulation
     // default command for drivetrain is to calculate speeds from controller and drive the robot
     drivetrain.setDefaultCommand(new RunCommand(() -> {
-      ChassisSpeeds speeds = driverController.getDesiredChassisSpeeds(); 
+      ChassisState speeds = driverController.getDesiredChassisState(); 
       SmartDashboard.putNumber("x", speeds.vxMetersPerSecond); 
       SmartDashboard.putNumber("y", speeds.vyMetersPerSecond); 
-      SmartDashboard.putNumber("rotation", speeds.omegaRadiansPerSecond); 
-      drivetrain.swerveDrive(speeds);
+      SmartDashboard.putNumber("rotation", speeds.omegaRadians); 
+      drivetrain.swerveDriveFieldRel(speeds);
     }, drivetrain));
   }
 
@@ -76,33 +75,39 @@ public class RobotContainer {
     //manipulatorController.().onTrue(new TakeIn(intake, 1));
     //manipulatorController.()onFalse(new IntakeStop(intake));
 
+    driverController.A.onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
+
+    driverController.B.onTrue(new TuneTurnToAngle(drivetrain)); 
+    driverController.Y.onTrue(new TuneBalance(drivetrain)); 
+
     driverController.RightTrigger
       .onTrue(new InstantCommand(() -> driverController.setSlowMode(Mode.SLOW)))
       .onFalse(new InstantCommand(() -> driverController.setSlowMode(Mode.NORMAL))); 
 
-    new Trigger(() -> manipulatorController.getLeftY() < -0.5)
-      .onTrue(new TakeIn(intake, Constants.IntakeConstants.kIntakeSpeed))
-      .onFalse(new IntakeStop(intake)); 
+    // new Trigger(() -> manipulatorController.getLeftY() < -0.5)
+    //   .onTrue(new TakeIn(intake, Constants.IntakeConstants.kIntakeSpeed))
+    //   .onFalse(new IntakeStop(intake)); 
 
-    manipulatorController.y().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedHigh));
-    manipulatorController.y().onFalse(new IntakeStop(intake));
+    // manipulatorController.y().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedHigh));
+    // manipulatorController.y().onFalse(new IntakeStop(intake));
 
-    manipulatorController.b().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedMid));
-    manipulatorController.b().onFalse(new IntakeStop(intake));
+    // manipulatorController.b().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedMid));
+    // manipulatorController.b().onFalse(new IntakeStop(intake));
 
-    manipulatorController.a().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedLow));
-    manipulatorController.a().onFalse(new IntakeStop(intake));
+    // manipulatorController.a().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedLow));
+    // manipulatorController.a().onFalse(new IntakeStop(intake));
 
-    manipulatorController.rightTrigger().onTrue(new GoToGround(arm));
-    manipulatorController.rightTrigger().onFalse(new GoToHardStop(arm));
+    // manipulatorController.rightTrigger().onTrue(new GoToGround(arm));
+    // manipulatorController.rightTrigger().onFalse(new GoToHardStop(arm));
   }
   // send any data as needed to the dashboard
   public void doSendables() {
-
+    SmartDashboard.putData("Autonomous", autoPicker.getChooser()); 
   }
 
   // givess the currently picked auto as the chosen auto for the match
   public Command getAutonomousCommand() {
+    // return null; 
     return autoPicker.getAuto();
     // return new SwerveTurnTunerCommand(7, 8, 13); 
   }

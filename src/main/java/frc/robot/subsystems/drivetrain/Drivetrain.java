@@ -2,6 +2,8 @@ package frc.robot.subsystems.drivetrain;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -9,9 +11,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.SwerveModule.DriveState;
+import frc.robot.util.ChassisState;
+import frc.robot.util.SwerveUtils;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -28,19 +33,34 @@ public class Drivetrain extends SubsystemBase {
   public AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   // represents the current drive state of the robot
-  private DriveState driveState = DriveState.OPEN_LOOP; 
+  private DriveState driveState = DriveState.CLOSED_LOOP; 
+
+  private PIDController rotationController = new PIDController(
+      Constants.DrivetrainConstants.kTurn_P,
+      Constants.DrivetrainConstants.kTurn_I,
+      Constants.DrivetrainConstants.kTurn_D
+  ); ; 
 
   public Drivetrain() {
+
+    this.rotationController.enableContinuousInput(-180, 180); 
+
     // zero yaw when drivetrain first starts up
     this.gyro.zeroYaw();
 
     // create the pose estimator
     this.odometry = new SwerveDrivePoseEstimator(Constants.DrivetrainConstants.kDriveKinematics, gyro.getRotation2d(), getPositions(), new Pose2d()); 
+    
   }
 
   @Override
   public void periodic() {
     // update the odometry with the newest rotations, positions of the swerve modules
+    SmartDashboard.putNumber("drive yaw", gyro.getYaw());
+    SmartDashboard.putNumber("drive x", odometry.getEstimatedPosition().getX());
+    SmartDashboard.putNumber("drive y", odometry.getEstimatedPosition().getY());
+    SmartDashboard.putNumber("drive omega", odometry.getEstimatedPosition().getRotation().getDegrees());
+    
     this.odometry.update(gyro.getRotation2d(), getPositions());
   }
 
@@ -68,16 +88,36 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void swerveDrive(ChassisSpeeds speeds) {
+    ChassisSpeeds fieldRelative = ChassisSpeeds.fromFieldRelativeSpeeds(
+      speeds, 
+      gyro.getRotation2d()
+    ); 
     // calculate module states from the target speeds
-    SwerveModuleState[] states = Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(
-        speeds, 
-        gyro.getRotation2d()
-      )); 
+    SwerveModuleState[] states = Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(SwerveUtils.correctInputWithRotation(fieldRelative)); 
 
       // ensure all speeds are reachable by the wheel
       SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.DrivetrainConstants.kMaxAttainableSpeedMetersPerSecond);
 
       swerveDrive(states);
+  }
+
+  private double lastTurnedTheta = 0; 
+
+  public void swerveDriveFieldRel(double xMetersPerSecond, double yMetersPerSecond, double thetaDegrees, boolean turn) {
+    // thetaDegrees to commit to going to our angle even after stopping pressing
+    // this.getYaw() to not commit
+    if (turn) lastTurnedTheta = thetaDegrees; 
+    
+    // always make an effort to rotate to the last angle we commanded it to
+    double rotSpeed = rotationController.calculate(this.getYaw(), lastTurnedTheta); 
+
+    rotSpeed = MathUtil.clamp(rotSpeed, -Constants.DrivetrainConstants.kMaxRotationRadPerSecond, Constants.DrivetrainConstants.kMaxRotationRadPerSecond); 
+
+    swerveDrive(xMetersPerSecond, yMetersPerSecond, rotSpeed);
+  }
+
+  public void swerveDriveFieldRel(ChassisState state) {
+    swerveDriveFieldRel(state.vxMetersPerSecond, state.vyMetersPerSecond, Math.toDegrees(state.omegaRadians), state.turn);
   }
 
   // command the swerve modules to the intended states
@@ -108,6 +148,8 @@ public class Drivetrain extends SubsystemBase {
       backRight.getCurrentState()
     }; 
   }
+
+
 
   // returns the speed of the robot 
   public ChassisSpeeds getChassisSpeeds() {
