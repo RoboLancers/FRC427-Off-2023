@@ -72,6 +72,9 @@ public class AutoPicker extends CommandBase  {
         addPPSwerveAuto("SecondAuto", "BalanceAuto");
         addPPSwerveAuto("ThirdAuto", "TaxiAuto");
         addPPSwerveAuto("FourthAuto", "TestAuto");
+        addPPSwerveAuto("FifthAuto", "ScoreBalanceAuto");
+        addPPSwerveAuto("SixthAuto", "ScoreThirdAuto");
+        addPPSwerveAuto("SeventhAuto", "TaxiFirstAuto");
     }
 
     public void addEvent(String key, Command command) {
