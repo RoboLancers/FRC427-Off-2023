@@ -54,6 +54,37 @@ public class DriverController extends Controller {
         return ControllerUtils.applyDeadband(super.getRightStickY(), deadzone);
     }
 
+    public ChassisSpeeds getDesiredChassisSpeeds() {
+        // deadzone-only values
+        double throttleForward = -getLeftStickY();
+        double throttleStrafe = -getLeftStickX();
+        double throttleTurn = -getRightStickX(); 
+        
+        double speedForward = ControllerUtils.squareKeepSign(throttleForward) * maxSpeed.get(); 
+        double speedStrafe = ControllerUtils.squareKeepSign(throttleStrafe) * maxSpeed.get(); 
+        double speedTurn = ControllerUtils.squareKeepSign(throttleTurn) * maxRotation.get(); 
+
+        // ChassisSpeeds speeds = new ChassisSpeeds(
+        //     forwardRateLimiter.calculate(speedForward), 
+        //     strafeRateLimiter.calculate(speedStrafe), 
+        //     turnRateLimiter.calculate(speedTurn)
+        // ); 
+        ChassisSpeeds speeds = new ChassisSpeeds(
+            forwardRateLimiter.calculate(speedForward), 
+            strafeRateLimiter.calculate(speedStrafe), 
+            turnRateLimiter.calculate(speedTurn)
+        ); 
+
+        // ChassisSpeeds oldSpeeds = chassisSpeedsSupplier.get(); 
+        // if (oldSpeeds != null) {
+        //     forwardRateLimiter.reset(oldSpeeds.vxMetersPerSecond);
+        //     strafeRateLimiter.reset(oldSpeeds.vyMetersPerSecond);
+        //     turnRateLimiter.reset(oldSpeeds.omegaRadiansPerSecond);
+        // }
+
+        return speeds;  
+    }
+
     public ChassisState getDesiredChassisState() {
         // deadzone-only values
         double throttleForward = -getLeftStickY();
@@ -70,7 +101,7 @@ public class DriverController extends Controller {
         //     strafeRateLimiter.calculate(speedStrafe), 
         //     turnRateLimiter.calculate(speedTurn)
         // ); 
-        ChassisState speeds = new ChassisState(
+        ChassisState state = new ChassisState(
             forwardRateLimiter.calculate(speedForward), 
             strafeRateLimiter.calculate(speedStrafe), 
             Math.atan2(turnX, turnY), // speedTurn
@@ -84,7 +115,7 @@ public class DriverController extends Controller {
         //     turnRateLimiter.reset(oldSpeeds.omegaRadiansPerSecond);
         // }
 
-        return speeds;  
+        return state;  
     }
     
     public Mode getSlowMode() {

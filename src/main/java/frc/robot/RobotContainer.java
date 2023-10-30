@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.TuneBalance;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.drivetrain.commands.TeleOpCommand;
 import frc.robot.subsystems.drivetrain.commands.TuneTurnToAngle;
 import frc.robot.util.ChassisState;
 import frc.robot.util.DriverController;
@@ -13,6 +14,7 @@ import frc.robot.util.DriverController.Mode;
 
 import com.pathplanner.lib.server.PathPlannerServer;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -53,13 +55,7 @@ public class RobotContainer {
 
     // driverController.setChassisSpeedsSupplier(drivetrain::getChassisSpeeds); // comment in simulation
     // default command for drivetrain is to calculate speeds from controller and drive the robot
-    drivetrain.setDefaultCommand(new RunCommand(() -> {
-      ChassisState speeds = driverController.getDesiredChassisState(); 
-      SmartDashboard.putNumber("x", speeds.vxMetersPerSecond); 
-      SmartDashboard.putNumber("y", speeds.vyMetersPerSecond); 
-      SmartDashboard.putNumber("rotation", speeds.omegaRadians); 
-      drivetrain.swerveDriveFieldRel(speeds);
-    }, drivetrain));
+    drivetrain.setDefaultCommand(new TeleOpCommand(drivetrain, driverController));
   }
 
   /**

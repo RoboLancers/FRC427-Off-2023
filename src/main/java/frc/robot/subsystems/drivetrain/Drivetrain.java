@@ -10,7 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -30,7 +30,7 @@ public class Drivetrain extends SubsystemBase {
   private SwerveDrivePoseEstimator odometry; 
 
   // initialize the gyro on the robot
-  public AHRS gyro = new AHRS(SPI.Port.kMXP);
+  public AHRS gyro = new AHRS(SerialPort.Port.kMXP);
 
   // represents the current drive state of the robot
   private DriveState driveState = DriveState.CLOSED_LOOP; 
@@ -39,7 +39,7 @@ public class Drivetrain extends SubsystemBase {
       Constants.DrivetrainConstants.kTurn_P,
       Constants.DrivetrainConstants.kTurn_I,
       Constants.DrivetrainConstants.kTurn_D
-  ); ; 
+  ); 
 
   public Drivetrain() {
 
@@ -92,24 +92,38 @@ public class Drivetrain extends SubsystemBase {
       speeds, 
       gyro.getRotation2d()
     ); 
+
+    // correct for drift in the chassis
+    ChassisSpeeds correctedSpeeds = SwerveUtils.correctInputWithRotation(fieldRelative); 
+
     // calculate module states from the target speeds
-    SwerveModuleState[] states = Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(SwerveUtils.correctInputWithRotation(fieldRelative)); 
+    SwerveModuleState[] states = Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(correctedSpeeds); 
 
-      // ensure all speeds are reachable by the wheel
-      SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.DrivetrainConstants.kMaxAttainableSpeedMetersPerSecond);
+    // ensure all speeds are reachable by the wheel
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.DrivetrainConstants.kMaxAttainableSpeedMetersPerSecond);
 
-      swerveDrive(states);
+    swerveDrive(states);
   }
 
   private double lastTurnedTheta = 0; 
 
+  public void resetLastTurnedTheta() {
+    lastTurnedTheta = this.getYaw(); 
+  }
+
   public void swerveDriveFieldRel(double xMetersPerSecond, double yMetersPerSecond, double thetaDegrees, boolean turn) {
-    // thetaDegrees to commit to going to our angle even after stopping pressing
-    // this.getYaw() to not commit
+    
     if (turn) lastTurnedTheta = thetaDegrees; 
     
     // always make an effort to rotate to the last angle we commanded it to
+
+    // to commit to going to our angle even after stopping pressing
     double rotSpeed = rotationController.calculate(this.getYaw(), lastTurnedTheta); 
+
+    // or to not commit to the angle
+    // if (turn) lastTurnedTheta = this.getYaw(); 
+    // double rotSpeed = rotationController.calculate(this.getYaw(), turn ? thetaDegrees : lastTurnedTheta); 
+     
 
     rotSpeed = MathUtil.clamp(rotSpeed, -Constants.DrivetrainConstants.kMaxRotationRadPerSecond, Constants.DrivetrainConstants.kMaxRotationRadPerSecond); 
 
