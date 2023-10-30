@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.Constants;
@@ -31,7 +32,8 @@ public Balance(Drivetrain drivetrain) {
         // Calculates our current angle to the desired angle of 0. 
         // Then uses the calulated number in the PID to drive at certain speed to get to 0 degrees on the pad
     double speedOnDegree = m_BalancePID.calculate(m_drivetrain.gyro.getPitch(), m_BalancePID.getSetpoint());
-        m_drivetrain.swerveDrive(speedOnDegree, 0, 0);
+        m_drivetrain.swerveDriveRobotCentric(new ChassisSpeeds(speedOnDegree, 0, 0));
+        
     }
 
     public boolean isFinished() {
@@ -40,7 +42,9 @@ public Balance(Drivetrain drivetrain) {
     }
 
     public void end(boolean interrupted) {
+        
+            
         // tells the bot to STOP MOVING when alls done :)
-        m_drivetrain.swerveDrive(0, 0, 0);
+        m_drivetrain.swerveDriveRobotCentric(new ChassisSpeeds(0, 0, 0));
     }
 }
