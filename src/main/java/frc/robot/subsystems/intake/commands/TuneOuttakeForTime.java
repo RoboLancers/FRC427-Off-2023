@@ -3,8 +3,9 @@ package frc.robot.subsystems.intake.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.util.IOUtils;
 
-public class OuttakeForTime extends CommandBase {
+public class TuneOuttakeForTime extends CommandBase {
         // declare how long to outtake for and how fast
     Intake m_intake;
     double m_speed;
@@ -12,10 +13,10 @@ public class OuttakeForTime extends CommandBase {
     Timer m_timer = new Timer();
     private double m_time;
         // establishes outtake, speed, and time
-    public OuttakeForTime(Intake outtake, double speed, double time) {
+    public TuneOuttakeForTime(Intake outtake) {
     this.m_intake = outtake;
-    this.m_speed = speed;
-    this.m_time = time;
+    this.m_speed = IOUtils.get("outtake_speed");
+    this.m_time = IOUtils.get("outtake_time");
 
         addRequirements(outtake);
     }

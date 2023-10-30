@@ -15,17 +15,16 @@ public class DriverController extends Controller {
 
     private double deadzone; 
 
-    private Supplier<ChassisSpeeds> chassisSpeedsSupplier = () -> null; 
-    private Supplier<Double> maxSpeed = () -> Constants.DrivetrainConstants.kMaxSpeedMetersPerSecond; 
-    private Supplier<Double> maxRotation = () -> Constants.DrivetrainConstants.kMaxRotationRadPerSecond; 
-
-    // TODO: refactor
     public enum Mode {
         NORMAL,
         SLOW
     }
     
-    private Mode mode;
+    private Mode mode = Mode.NORMAL;
+
+    private Supplier<ChassisSpeeds> chassisSpeedsSupplier = () -> null; 
+    private Supplier<Double> maxSpeed = () -> mode == Mode.NORMAL ? Constants.DrivetrainConstants.kMaxSpeedMetersPerSecond : Constants.DrivetrainConstants.kMaxSlowSpeedMetersPerSecond;   
+    private Supplier<Double> maxRotation = () -> mode == Mode.NORMAL ? Constants.DrivetrainConstants.kMaxRotationRadPerSecond : Constants.DrivetrainConstants.kMaxSlowRotationRadPerSecond; 
 
     public DriverController(int port) {
         this(port, 0.05); 
@@ -65,30 +64,66 @@ public class DriverController extends Controller {
         double speedStrafe = ControllerUtils.squareKeepSign(throttleStrafe) * maxSpeed.get(); 
         double speedTurn = ControllerUtils.squareKeepSign(throttleTurn) * maxRotation.get(); 
 
-        // TODO: add in rate limiters
         // ChassisSpeeds speeds = new ChassisSpeeds(
         //     forwardRateLimiter.calculate(speedForward), 
         //     strafeRateLimiter.calculate(speedStrafe), 
         //     turnRateLimiter.calculate(speedTurn)
         // ); 
         ChassisSpeeds speeds = new ChassisSpeeds(
-            speedForward, 
-            speedStrafe, 
-            speedTurn
+            forwardRateLimiter.calculate(speedForward), 
+            strafeRateLimiter.calculate(speedStrafe), 
+            turnRateLimiter.calculate(speedTurn)
         ); 
 
-        ChassisSpeeds oldSpeeds = chassisSpeedsSupplier.get(); 
-        if (oldSpeeds != null) {
-            forwardRateLimiter.reset(oldSpeeds.vxMetersPerSecond);
-            strafeRateLimiter.reset(oldSpeeds.vyMetersPerSecond);
-            turnRateLimiter.reset(oldSpeeds.omegaRadiansPerSecond);
-        }
+        // ChassisSpeeds oldSpeeds = chassisSpeedsSupplier.get(); 
+        // if (oldSpeeds != null) {
+        //     forwardRateLimiter.reset(oldSpeeds.vxMetersPerSecond);
+        //     strafeRateLimiter.reset(oldSpeeds.vyMetersPerSecond);
+        //     turnRateLimiter.reset(oldSpeeds.omegaRadiansPerSecond);
+        // }
 
         return speeds;  
+    }
+
+    public ChassisState getDesiredChassisState() {
+        // deadzone-only values
+        double throttleForward = -getLeftStickY();
+        double throttleStrafe = -getLeftStickX();
+        double turnX = -getRightStickX(); 
+        double turnY = -getRightStickY(); 
+        
+        double speedForward = ControllerUtils.squareKeepSign(throttleForward) * maxSpeed.get(); 
+        double speedStrafe = ControllerUtils.squareKeepSign(throttleStrafe) * maxSpeed.get(); 
+        // double speedTurn = ControllerUtils.squareKeepSign(throttleTurn) * maxRotation.get(); 
+
+        // ChassisSpeeds speeds = new ChassisSpeeds(
+        //     forwardRateLimiter.calculate(speedForward), 
+        //     strafeRateLimiter.calculate(speedStrafe), 
+        //     turnRateLimiter.calculate(speedTurn)
+        // ); 
+        ChassisState state = new ChassisState(
+            forwardRateLimiter.calculate(speedForward), 
+            strafeRateLimiter.calculate(speedStrafe), 
+            Math.atan2(turnX, turnY), // speedTurn
+            turnY != 0 || turnX != 0
+        ); 
+
+        // ChassisSpeeds oldSpeeds = chassisSpeedsSupplier.get(); 
+        // if (oldSpeeds != null) {
+        //     forwardRateLimiter.reset(oldSpeeds.vxMetersPerSecond);
+        //     strafeRateLimiter.reset(oldSpeeds.vyMetersPerSecond);
+        //     turnRateLimiter.reset(oldSpeeds.omegaRadiansPerSecond);
+        // }
+
+        return state;  
     }
     
     public Mode getSlowMode() {
         return this.mode; 
+    }
+
+    public void setSlowMode(Mode mode) {
+        this.mode = mode; 
     }
 
     public void setChassisSpeedsSupplier(Supplier<ChassisSpeeds> s) {

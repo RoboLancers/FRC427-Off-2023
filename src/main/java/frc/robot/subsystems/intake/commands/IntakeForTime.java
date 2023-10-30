@@ -1,10 +1,8 @@
 package frc.robot.subsystems.intake.commands;
 
-import java.sql.Time;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.intake.Intake;
 
 // declare how long to intake for and how fast

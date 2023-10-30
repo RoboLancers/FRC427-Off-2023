@@ -37,7 +37,8 @@ public class SwerveDriveTunerCommand extends CommandBase {
         module.setDrivePID(
             SmartDashboard.getNumber("SwerveDrivekP", Constants.DrivetrainConstants.kModuleDrive_P), 
             SmartDashboard.getNumber("SwerveDrivekI", 0), 
-            SmartDashboard.getNumber("SwerveDrivekD", 0)
+            SmartDashboard.getNumber("SwerveDrivekD", 0), 
+            SmartDashboard.getNumber("SwerveDrivekFF", 0)
             );
 
         // drive the module with the desired drive speed setpoint (from dashboard)

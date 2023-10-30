@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 // represents a single swerve pod on the robot
@@ -92,7 +93,7 @@ public class SwerveModule {
             Constants.DrivetrainConstants.kModuleTurn_D
             );
         
-        setDrivePID(Constants.DrivetrainConstants.kModuleDrive_P, Constants.DrivetrainConstants.kModuleDrive_I, Constants.DrivetrainConstants.kModuleDrive_D);
+        setDrivePID(Constants.DrivetrainConstants.kModuleDrive_P, Constants.DrivetrainConstants.kModuleDrive_I, Constants.DrivetrainConstants.kModuleDrive_D, Constants.DrivetrainConstants.kModuleDrive_FF);
     }
 
     // sets the PID constants for the turn motor
@@ -101,10 +102,11 @@ public class SwerveModule {
     }
 
     // sets the PID constants for the drive motor
-    public void setDrivePID(double p, double i, double d) {
+    public void setDrivePID(double p, double i, double d, double ff) {
         this.drivePIDController.setP(p); 
         this.drivePIDController.setI(i); 
         this.drivePIDController.setD(d); 
+        this.drivePIDController.setFF(ff); 
     }
 
     /**
@@ -113,6 +115,10 @@ public class SwerveModule {
      * @param driveType the type of drive to operate with
      */
     public void updateState(SwerveModuleState state, DriveState driveType) {
+        SmartDashboard.putNumber("module " + absoluteTurnEncoder.getDeviceID() + " desired speed", state.speedMetersPerSecond); 
+        SmartDashboard.putNumber("module " + absoluteTurnEncoder.getDeviceID() + " actual speed", this.driveEncoder.getVelocity()); 
+        SmartDashboard.putNumber("module " + absoluteTurnEncoder.getDeviceID() + " diff speed", state.speedMetersPerSecond - this.driveEncoder.getVelocity()); 
+
         this.targetState = state; 
 
         // optimize angles so the wheels only have to turn 90 degrees to reach their setpoint at any given time
