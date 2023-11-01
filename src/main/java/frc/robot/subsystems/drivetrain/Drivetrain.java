@@ -88,13 +88,13 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void swerveDrive(ChassisSpeeds speeds) {
-    ChassisSpeeds fieldRelative = ChassisSpeeds.fromFieldRelativeSpeeds(
+    ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(
       speeds, 
       gyro.getRotation2d()
     ); 
 
     // correct for drift in the chassis
-    ChassisSpeeds correctedSpeeds = SwerveUtils.correctInputWithRotation(fieldRelative); 
+    ChassisSpeeds correctedSpeeds = SwerveUtils.correctInputWithRotation(robotRelative); 
 
     // calculate module states from the target speeds
     SwerveModuleState[] states = Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(correctedSpeeds); 
