@@ -10,7 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -30,7 +30,7 @@ public class Drivetrain extends SubsystemBase {
   private SwerveDrivePoseEstimator odometry; 
 
   // initialize the gyro on the robot
-  public AHRS gyro = new AHRS(SerialPort.Port.kMXP);
+  public AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   // represents the current drive state of the robot
   private DriveState driveState = DriveState.CLOSED_LOOP; 
@@ -113,16 +113,16 @@ public class Drivetrain extends SubsystemBase {
 
   public void swerveDriveFieldRel(double xMetersPerSecond, double yMetersPerSecond, double thetaDegrees, boolean turn) {
     
-    if (turn) lastTurnedTheta = thetaDegrees; 
+   // if (turn) lastTurnedTheta = thetaDegrees; 
     
     // always make an effort to rotate to the last angle we commanded it to
 
     // to commit to going to our angle even after stopping pressing
-    double rotSpeed = rotationController.calculate(this.getYaw(), lastTurnedTheta); 
+   // double rotSpeed = rotationController.calculate(this.getYaw(), lastTurnedTheta); 
 
     // or to not commit to the angle
-    // if (turn) lastTurnedTheta = this.getYaw(); 
-    // double rotSpeed = rotationController.calculate(this.getYaw(), turn ? thetaDegrees : lastTurnedTheta); 
+     if (turn) lastTurnedTheta = this.getYaw(); 
+     double rotSpeed = rotationController.calculate(this.getYaw(), turn ? thetaDegrees : lastTurnedTheta); 
      
 
     rotSpeed = MathUtil.clamp(rotSpeed, -Constants.DrivetrainConstants.kMaxRotationRadPerSecond, Constants.DrivetrainConstants.kMaxRotationRadPerSecond); 
