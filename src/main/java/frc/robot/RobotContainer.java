@@ -8,6 +8,7 @@ import frc.robot.commands.TuneBalance;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.commands.TeleOpCommand;
 import frc.robot.subsystems.drivetrain.commands.TuneTurnToAngle;
+import frc.robot.subsystems.intake.commands.TakeOut;
 import frc.robot.util.ChassisState;
 import frc.robot.util.DriverController;
 import frc.robot.util.DriverController.Mode;
@@ -80,9 +81,15 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> driverController.setSlowMode(Mode.SLOW)))
       .onFalse(new InstantCommand(() -> driverController.setSlowMode(Mode.NORMAL))); 
 
-    // new Trigger(() -> manipulatorController.getLeftY() < -0.5)
-    //   .onTrue(new TakeIn(intake, Constants.IntakeConstants.kIntakeSpeed))
-    //   .onFalse(new IntakeStop(intake)); 
+  // new Trigger(() -> manipulatorController.getLeftY() < -0.5)
+  //   .onTrue(new TakeIn(intake, Constants.IntakeConstants.kIntakeSpeed))
+  //   .onFalse(new IntakeStop(intake)); 
+
+  //   new Trigger(() -> manipulatorController.getLeftY() > 0.5)
+  //   .onTrue(new TakeOut(intake, Constants.IntakeConstants.kOuttakeSpeed))
+  //   .onFalse(new IntakeStop(intake)); 
+
+
 
     // manipulatorController.y().onTrue(new TakeOut(intake, Constants.IntakeConstants.kShootSpeedHigh));
     // manipulatorController.y().onFalse(new IntakeStop(intake));
