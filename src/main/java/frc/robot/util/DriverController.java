@@ -70,9 +70,9 @@ public class DriverController extends Controller {
         //     turnRateLimiter.calculate(speedTurn)
         // ); 
         ChassisSpeeds speeds = new ChassisSpeeds(
-            forwardRateLimiter.calculate(speedForward), 
-            strafeRateLimiter.calculate(speedStrafe), 
-            turnRateLimiter.calculate(speedTurn)
+            speedForward, 
+            speedStrafe, 
+            speedTurn
         ); 
 
         // ChassisSpeeds oldSpeeds = chassisSpeedsSupplier.get(); 
@@ -102,8 +102,8 @@ public class DriverController extends Controller {
         //     turnRateLimiter.calculate(speedTurn)
         // ); 
         ChassisState state = new ChassisState(
-            forwardRateLimiter.calculate(speedForward), 
-            strafeRateLimiter.calculate(speedStrafe), 
+            (speedForward), 
+            (speedStrafe), 
             Math.atan2(turnX, turnY), // speedTurn
             turnY != 0 || turnX != 0
         ); 
