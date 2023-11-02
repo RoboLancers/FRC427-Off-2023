@@ -88,13 +88,13 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void swerveDrive(ChassisSpeeds speeds) {
-    ChassisSpeeds fieldRelative = ChassisSpeeds.fromFieldRelativeSpeeds(
+    ChassisSpeeds robotRelative = ChassisSpeeds.fromFieldRelativeSpeeds(
       speeds, 
       gyro.getRotation2d()
     ); 
 
     // correct for drift in the chassis
-    ChassisSpeeds correctedSpeeds = SwerveUtils.correctInputWithRotation(fieldRelative); 
+    ChassisSpeeds correctedSpeeds = SwerveUtils.correctInputWithRotation(robotRelative); 
 
     // calculate module states from the target speeds
     SwerveModuleState[] states = Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(correctedSpeeds); 
@@ -104,7 +104,18 @@ public class Drivetrain extends SubsystemBase {
 
     swerveDrive(states);
   }
+  public void swerveDriveRobotCentric(ChassisSpeeds speeds) {
+    // correct for drift in the chassis
+    ChassisSpeeds correctedSpeeds = SwerveUtils.correctInputWithRotation(speeds); 
 
+    // calculate module states from the target speeds
+    SwerveModuleState[] states = Constants.DrivetrainConstants.kDriveKinematics.toSwerveModuleStates(correctedSpeeds); 
+
+    // ensure all speeds are reachable by the wheel
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.DrivetrainConstants.kMaxAttainableSpeedMetersPerSecond);
+
+    swerveDrive(states);
+  }
   private double lastTurnedTheta = 0; 
 
   public void resetLastTurnedTheta() {

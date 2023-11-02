@@ -177,6 +177,8 @@ public final class Constants {
     public static final double kShootSpeedLow = 0.1;
 
     public static final double kIntakeSpeed = 1;
+
+    public static final double kOuttakeSpeed = 1;
   }
 
   public static class BalanceAutoConstants {
