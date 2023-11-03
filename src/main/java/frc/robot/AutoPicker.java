@@ -63,13 +63,14 @@ public class AutoPicker {
 
     public void addAutos() {
         // eg. addPPSwerveAuto("BalanceAuto", "Mid Lane Auto"); 
-        addPPSwerveAuto("TwoCubesAuto");
+       // addPPSwerveAuto("TwoCubesAuto");
         addPPSwerveAuto("BalanceAuto");
         addPPSwerveAuto("TaxiAuto");
-        addPPSwerveAuto("TestAuto");
-        addPPSwerveAuto("ScoreBalanceAuto");
-        addPPSwerveAuto("ScoreThirdAuto");
+        // addPPSwerveAuto("TestAuto");
+        // addPPSwerveAuto("ScoreBalanceAuto");
+        // addPPSwerveAuto("ScoreThirdAuto");
         addPPSwerveAuto("TaxiFirstAuto");
+        addPPSwerveAuto("BalanceTaxiAuto");
     }
 
     public void addEvent(String key, Command command) {

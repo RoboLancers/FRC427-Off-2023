@@ -2,40 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.926165167121739,
-        "y": 1.0337017892746279
+        "x": 1.9058965045869423,
+        "y": 2.8173440923367314
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7275704228396664,
-        "y": 1.0337017892746279
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [
-          "score_cube"
-        ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 6.503640874580328,
-        "y": 0.9687892361566719
-      },
-      "prevControl": {
-        "x": 5.173930158286856,
-        "y": 1.0067809709079136
-      },
-      "nextControl": {
-        "x": 6.924068010484732,
-        "y": 0.956777032273689
+        "x": 2.9058965045869405,
+        "y": 2.8173440923367314
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -51,12 +24,37 @@
     },
     {
       "anchorPoint": {
-        "x": 1.9066409696800444,
-        "y": 1.0067809709079136
+        "x": 6.010300667883259,
+        "y": 2.76667243599974
       },
       "prevControl": {
-        "x": 3.6996731389164434,
-        "y": 0.7499405137874754
+        "x": 5.34143480423497,
+        "y": 2.76667243599974
+      },
+      "nextControl": {
+        "x": 5.34143480423497,
+        "y": 2.76667243599974
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.41921065890679,
+        "y": 2.8072097610744002
+      },
+      "prevControl": {
+        "x": 5.07794219128768,
+        "y": 2.837612754876595
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -66,7 +64,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "score_cube"
+          "balance_auto"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -74,12 +72,5 @@
       }
     }
   ],
-  "markers": [
-    {
-      "position": 1.0181818181818607,
-      "names": [
-        "intake_cube"
-      ]
-    }
-  ]
+  "markers": []
 }
