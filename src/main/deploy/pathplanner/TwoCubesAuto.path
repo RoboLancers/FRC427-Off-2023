@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.7641719643628866,
-        "y": 4.426037098519695
+        "x": 1.8552248482499505,
+        "y": 4.4489714263878595
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8849281395245283,
-        "y": 4.72047304284182
+        "x": 3.014011683466771,
+        "y": 4.4489714263878595
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -16,8 +16,10 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "score_cube"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -74,16 +76,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.7641719643628866,
-        "y": 4.435535032202757
+        "x": 1.8754935107847472,
+        "y": 4.4489714263878595
       },
       "prevControl": {
-        "x": 3.2838413544173175,
-        "y": 4.967419318724894
+        "x": 3.395162900839179,
+        "y": 4.980855712909997
       },
       "nextControl": {
-        "x": 3.2838413544173175,
-        "y": 4.967419318724894
+        "x": 3.395162900839179,
+        "y": 4.980855712909997
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -91,8 +93,10 @@
       "isLocked": false,
       "isStopPoint": true,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "score_cube"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -174,12 +178,12 @@
     },
     {
       "anchorPoint": {
-        "x": 1.7736698980506969,
-        "y": 4.4260370985149455
+        "x": 1.9058965045869423,
+        "y": 4.438837095120461
       },
       "prevControl": {
-        "x": 1.8021636991141277,
-        "y": 4.264572225822167
+        "x": 1.934390305650373,
+        "y": 4.277372222427683
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -188,8 +192,10 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "score_cube"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -224,12 +230,6 @@
       "position": 5.218181818182449,
       "names": [
         "intake_cube"
-      ]
-    },
-    {
-      "position": 7.0,
-      "names": [
-        "score_cube"
       ]
     },
     {
