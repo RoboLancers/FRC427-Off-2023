@@ -5,9 +5,12 @@
 package frc.robot;
 
 import frc.robot.commands.TuneBalance;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.commands.TuneGoToAngle;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.commands.TeleOpCommand;
 import frc.robot.subsystems.drivetrain.commands.TuneTurnToAngle;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.commands.TakeOut;
 import frc.robot.util.ChassisState;
 import frc.robot.util.DriverController;
@@ -36,10 +39,12 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
 
   //intake of the robot
-  // private final Intake intake = new Intake();
+  private final Intake intake = new Intake();
 
   //arm of the robot
-  // private final Arm arm = new Arm();
+  private final Arm arm = new Arm();
+
+  public Command tunegotoangle2 = new TuneGoToAngle(arm);
 
   // controller for the driver
   private final DriverController driverController =
@@ -49,6 +54,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    SmartDashboard.putBoolean("baby mode", false); 
     PathPlannerServer.startServer(5811);
     autoPicker = new AutoPicker(drivetrain, null, null); 
     // Configure the trigger bindings
@@ -105,13 +112,20 @@ public class RobotContainer {
   }
   // send any data as needed to the dashboard
   public void doSendables() {
-    SmartDashboard.putData("Autonomous", autoPicker.getChooser()); 
+    SmartDashboard.putData("Autonomous", autoPicker.getChooser());
+    SmartDashboard.putBoolean("gyro connected", drivetrain.gyro.isConnected()); 
+    if (SmartDashboard.getBoolean("baby mode", true)) {
+      driverController.setSlowMode(Mode.SLOW);
+    } else {
+      driverController.setSlowMode(Mode.NORMAL);
+    }
   }
 
   // givess the currently picked auto as the chosen auto for the match
   public Command getAutonomousCommand() {
-    // return null; 
-    return autoPicker.getAuto();
+     return null; 
+    // return autoPicker.getAuto();
+    // return tunegotoangle2;
     // return new SwerveTurnTunerCommand(7, 8, 13); 
   }
 }

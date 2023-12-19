@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.Balance;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.intake.Intake;
@@ -57,20 +58,20 @@ public class AutoPicker {
         // addEvent("put_arm_down", new GoToGround(m_ArmSubsystem));
         // addEvent("put_arm_up", new GoToHardStop(m_ArmSubsystem));
         // addEvent("intake_cube", new IntakeForTime(m_intakeSubsystem, Constants.IntakeConstants.kIntakeSpeed, 2));
-        // addEvent("balance_auto", new Balance(m_driveSubsystem));
+        addEvent("balance_auto", new Balance(m_driveSubsystem));
 
     }
 
     public void addAutos() {
         // eg. addPPSwerveAuto("BalanceAuto", "Mid Lane Auto"); 
        // addPPSwerveAuto("TwoCubesAuto");
-        addPPSwerveAuto("BalanceAuto");
+        addPPSwerveAuto("BalanceAuto", 1.5, 2);
         addPPSwerveAuto("TaxiAuto");
         // addPPSwerveAuto("TestAuto");
         // addPPSwerveAuto("ScoreBalanceAuto");
         // addPPSwerveAuto("ScoreThirdAuto");
         addPPSwerveAuto("TaxiFirstAuto");
-        addPPSwerveAuto("BalanceTaxiAuto");
+        addPPSwerveAuto("BalanceTaxiAuto", 1.5, 2);
     }
 
     public void addEvent(String key, Command command) {

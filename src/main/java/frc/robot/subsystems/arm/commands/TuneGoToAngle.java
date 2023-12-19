@@ -21,7 +21,6 @@ public class TuneGoToAngle extends CommandBase {
 
     public void initialize() {
         // makes arm go to angle
-        m_arm.goToAngle(m_angle);
         
     }
 
@@ -30,6 +29,12 @@ public class TuneGoToAngle extends CommandBase {
         m_arm.m_ArmPIDController.setI(IOUtils.get("Arm Go To Angle I"));
         m_arm.m_ArmPIDController.setD(IOUtils.get("Arm Go To Angle D"));
         m_arm.m_feedForward = new ArmFeedforward(IOUtils.get("Arm Go To Angle ks"), IOUtils.get("Arm Go To Angle kg"), IOUtils.get("Arm Go To Angle kv"));
+ 
+        
+        m_arm.goToAngle(IOUtils.get("ArmAngle"));
+
+        IOUtils.set("Current angle of Arm", m_arm.getAngle());
+
         //m_arm.m_feedForward.calculate(m_angle, IOUtils.get("tune Go To Angle Velocity"));
     }
 

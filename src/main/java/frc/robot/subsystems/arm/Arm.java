@@ -16,8 +16,7 @@ public class Arm extends SubsystemBase {
     
 
     //Initializing motors; defining encoders; defining PID controllers; defining feedforward
-    CANSparkMax m_armMotor = new CANSparkMax(Constants.ArmConstants.kArmMotorId
-    , MotorType.kBrushless);
+    CANSparkMax m_armMotor = new CANSparkMax(Constants.ArmConstants.kArmMotorId, MotorType.kBrushless);
     
     RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
     public SparkMaxPIDController m_ArmPIDController = m_armMotor.getPIDController();
@@ -27,7 +26,6 @@ public class Arm extends SubsystemBase {
     public Arm() {
         // calculations for feedforward
         setupMotors();
-        m_feedForward.calculate(m_targetPosition, m_velocity);
     }
 
     public void setupMotors() {
@@ -40,8 +38,9 @@ public class Arm extends SubsystemBase {
         m_armEncoder.setPosition(Constants.ArmConstants.kInitialAngle);
         //setup PID :)
         m_ArmPIDController.setP(Constants.ArmConstants.kP);
+        m_ArmPIDController.setD(Constants.ArmConstants.kD);
         m_ArmPIDController.setI(0);
-        m_ArmPIDController.setD(0);
+
     }
     
     public void goToAngle(double position){
@@ -51,12 +50,15 @@ public class Arm extends SubsystemBase {
 
     public void periodic() {
         // gets velocity + more calculations for PID
-        m_ArmPIDController.setReference(this.m_targetPosition, ControlType.kPosition, 0, m_feedForward.calculate(m_armEncoder.getPosition(), m_velocity));
+        m_ArmPIDController.setReference(this.m_targetPosition, ControlType.kPosition, 0, m_feedForward.calculate(Math.toRadians(m_armEncoder.getPosition()), m_velocity));
         this.m_velocity = m_armEncoder.getVelocity();
     }
     
    public boolean isAtAngle() {
     // checks if position is good or not
     return (Math.abs(m_armEncoder.getPosition()) < Constants.ArmConstants.kAngleError);
+   }
+   public double getAngle() {
+    return m_armEncoder.getPosition();
    }
 }

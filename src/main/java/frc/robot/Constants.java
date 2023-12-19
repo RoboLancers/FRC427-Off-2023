@@ -79,7 +79,7 @@ public final class Constants {
     Math.hypot(kTrackWidthMeters / 2.0, kWheelBaseMeters / 2.0); // max rotation of robot
     
     // TODO: tune these
-    public static final double kMaxSpeedMetersPerSecond = 1.0; // max velocity (no turning) of robot; may tune to be a fraction of the attainable module speed
+    public static final double kMaxSpeedMetersPerSecond = 2.0; // max velocity (no turning) of robot; may tune to be a fraction of the attainable module speed
     public static final double kMaxSlowSpeedMetersPerSecond = 1.0; 
     public static final double kMaxAccelerationMetersPerSecondSquared = kMaxSpeedMetersPerSecond / 1.0; // max acceleration of robot (accelerate to max speed in 1 second)
     public static final double kMaxRotationRadPerSecond = Math.PI; // max rotation speed of the robot
@@ -143,11 +143,11 @@ public final class Constants {
   }
   
   public static class ArmConstants {
-    public static final int kArmMotorId = 9;
+    public static final int kArmMotorId = 11;
     public static double kFF = 0;
     public static final double kS = 0;
     public static final double kV = 0;
-    public static final double kG = 0;
+    public static final double kG = 0.97;
     public static final double kA = 0;
     public static final double kT = 0;
     public static final double kArmLength = 0;
@@ -156,16 +156,17 @@ public final class Constants {
     public static final double kGearBox = 0;
     public static final double kInitialAngle = 120;
     public static final double kGroundAngle = 0;
-    public static final double kP = 0;
+    public static final double kP = 0.01;
+    public static final double kD = 0.0000001;
     public static final int kCurrentLimit = 40;
-    public static final double kConversionFactor = 0.5;
+    public static final double kConversionFactor = 360.0/(3*4*5);
     public static final double kVelocityConversionFactor = kConversionFactor/60;
     public static final double kAngleError = 0;
   }
 
   public static class IntakeConstants {
-    public static final int kIntakeMotorRightId = 10;
-    public static final int kIntakeMotorLeftId = 11;
+    public static final int kIntakeMotorRightId = 9;
+    public static final int kIntakeMotorLeftId = 10;
 
     public static final int kIntakeMotorlimit = 40;
     

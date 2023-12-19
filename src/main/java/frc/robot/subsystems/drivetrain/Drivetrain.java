@@ -132,7 +132,7 @@ public class Drivetrain extends SubsystemBase {
    // double rotSpeed = rotationController.calculate(this.getYaw(), lastTurnedTheta); 
 
     // or to not commit to the angle
-     if (turn) lastTurnedTheta = this.getYaw(); 
+     if (turn || gyro.getRate() > 0.25) lastTurnedTheta = this.getYaw(); 
      double rotSpeed = rotationController.calculate(this.getYaw(), turn ? thetaDegrees : lastTurnedTheta); 
      
 
