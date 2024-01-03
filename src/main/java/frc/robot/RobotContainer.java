@@ -5,13 +5,13 @@
 package frc.robot;
 
 import frc.robot.commands.TuneBalance;
-import frc.robot.subsystems.arm.Arm;
+// import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.commands.TuneGoToAngle;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.commands.TeleOpCommand;
 import frc.robot.subsystems.drivetrain.commands.TuneTurnToAngle;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.commands.TakeOut;
+// import frc.robot.subsystems.intake.Intake;
+// import frc.robot.subsystems.intake.commands.TakeOut;
 import frc.robot.util.ChassisState;
 import frc.robot.util.DriverController;
 import frc.robot.util.DriverController.Mode;
@@ -39,12 +39,12 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
 
   //intake of the robot
-  private final Intake intake = new Intake();
+  // private final Intake intake = new Intake();
 
   //arm of the robot
-  private final Arm arm = new Arm();
+  // private final Arm arm = new Arm();
 
-  public Command tunegotoangle2 = new TuneGoToAngle(arm);
+ //  public Command tunegotoangle2 = new TuneGoToAngle(arm);
 
   // controller for the driver
   private final DriverController driverController =
@@ -81,8 +81,8 @@ public class RobotContainer {
 
     driverController.A.onTrue(new InstantCommand(() -> drivetrain.zeroHeading()));
 
-    driverController.B.onTrue(new TuneTurnToAngle(drivetrain)); 
-    driverController.Y.onTrue(new TuneBalance(drivetrain)); 
+    // driverController.B.onTrue(new TuneTurnToAngle(drivetrain)); 
+    // driverController.Y.onTrue(new TuneBalance(drivetrain)); 
 
     driverController.RightTrigger
       .onTrue(new InstantCommand(() -> driverController.setSlowMode(Mode.SLOW)))

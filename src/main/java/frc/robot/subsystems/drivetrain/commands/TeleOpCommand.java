@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drivetrain.commands;
 
+import java.security.Key;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -21,19 +23,22 @@ public class TeleOpCommand extends CommandBase {
 
     @Override
     public void initialize() {
+        SmartDashboard.putBoolean("snap", true);
         m_drivetrain.resetLastTurnedTheta(); 
     }
 
     @Override
     public void execute() {
         // ensure driving does not break if gyro disconnects, will hopefully transition to robot oriented drive
-        if (m_drivetrain.gyro.isConnected()) {
+        if (SmartDashboard.getBoolean("snap", true)) {
+            // align forward, align sideways, etc. 
             ChassisState speeds = m_controller.getDesiredChassisState(); 
             SmartDashboard.putNumber("x", speeds.vxMetersPerSecond); 
             SmartDashboard.putNumber("y", speeds.vyMetersPerSecond); 
             SmartDashboard.putNumber("rotation", speeds.omegaRadians); 
             m_drivetrain.swerveDriveFieldRel(speeds);
         } else {
+            // go left go right smoothly
             ChassisSpeeds speeds = m_controller.getDesiredChassisSpeeds(); 
             SmartDashboard.putNumber("x", speeds.vxMetersPerSecond); 
             SmartDashboard.putNumber("y", speeds.vyMetersPerSecond); 
