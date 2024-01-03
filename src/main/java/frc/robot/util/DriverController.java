@@ -23,8 +23,8 @@ public class DriverController extends Controller {
     private Mode mode = Mode.SLOW;
 
     private Supplier<ChassisSpeeds> chassisSpeedsSupplier = () -> null; 
-    private Supplier<Double> maxSpeed = () -> mode == Mode.SLOW ? Constants.DrivetrainConstants.kMaxSpeedMetersPerSecond : Constants.DrivetrainConstants.kMaxSlowSpeedMetersPerSecond;   
-    private Supplier<Double> maxRotation = () -> mode == Mode.SLOW ? Constants.DrivetrainConstants.kMaxRotationRadPerSecond : Constants.DrivetrainConstants.kMaxSlowRotationRadPerSecond; 
+    private Supplier<Double> maxSpeed = () -> mode == Mode.NORMAL ? Constants.DrivetrainConstants.kMaxSpeedMetersPerSecond : Constants.DrivetrainConstants.kMaxSlowSpeedMetersPerSecond;   
+    private Supplier<Double> maxRotation = () -> mode == Mode.NORMAL ? Constants.DrivetrainConstants.kMaxRotationRadPerSecond : Constants.DrivetrainConstants.kMaxSlowRotationRadPerSecond; 
 
     public DriverController(int port) {
         this(port, 0.05); 

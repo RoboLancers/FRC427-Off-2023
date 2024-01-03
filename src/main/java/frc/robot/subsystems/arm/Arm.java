@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-    double m_targetPosition = 0;
+    double m_targetPosition = Constants.ArmConstants.kInitialAngle;
     double m_velocity = 0;
     
 

@@ -79,10 +79,10 @@ public final class Constants {
     Math.hypot(kTrackWidthMeters / 2.0, kWheelBaseMeters / 2.0); // max rotation of robot
     
     // TODO: tune these
-    public static final double kMaxSpeedMetersPerSecond = 2.0; // max velocity (no turning) of robot; may tune to be a fraction of the attainable module speed
-    public static final double kMaxSlowSpeedMetersPerSecond = 1.0; 
+    public static double kMaxSpeedMetersPerSecond = 2.0; // max velocity (no turning) of robot; may tune to be a fraction of the attainable module speed
+    public static double kMaxSlowSpeedMetersPerSecond = 1.0; 
     public static final double kMaxAccelerationMetersPerSecondSquared = kMaxSpeedMetersPerSecond / 1.0; // max acceleration of robot (accelerate to max speed in 1 second)
-    public static final double kMaxRotationRadPerSecond = Math.PI; // max rotation speed of the robot
+    public static double kMaxRotationRadPerSecond = 3.14; // max rotation speed of the robot
     public static final double kMaxSlowRotationRadPerSecond = Math.PI / 2; 
     public static final double kMaxRotationAccelerationRadPerSecondSquared = Math.PI; // max angular acceleration of robot
 
@@ -114,7 +114,10 @@ public final class Constants {
     // TODO: tune these but it should be fine
     // current limits for each motor
     public static final int kDriveCurrentLimit = 40; 
+    public static final double kDriveRampRate = 0.25; 
+     
     public static final int kTurnCurrentLimit = 20; 
+    public static final double kTurnRampRate = 0.25;
 
     // max acceleration/deceleration of each motor (used for high CG robots)
     public static final double kForwardSlewRate = kMaxAccelerationMetersPerSecondSquared; 

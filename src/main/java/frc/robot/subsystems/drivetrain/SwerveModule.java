@@ -73,10 +73,15 @@ public class SwerveModule {
         this.driveMotor.setSmartCurrentLimit(Constants.DrivetrainConstants.kDriveCurrentLimit); 
         this.driveMotor.setIdleMode(IdleMode.kBrake); 
         this.driveMotor.enableVoltageCompensation(12); 
+        this.driveMotor.setClosedLoopRampRate(Constants.DrivetrainConstants.kDriveRampRate);
+        this.driveMotor.setOpenLoopRampRate(Constants.DrivetrainConstants.kDriveRampRate);
+         
 
         this.turnMotor.setSmartCurrentLimit(Constants.DrivetrainConstants.kTurnCurrentLimit); 
         this.turnMotor.setIdleMode(IdleMode.kBrake); 
         this.turnMotor.enableVoltageCompensation(12); 
+        this.turnMotor.setClosedLoopRampRate(Constants.DrivetrainConstants.kTurnRampRate);
+        this.turnMotor.setOpenLoopRampRate(Constants.DrivetrainConstants.kTurnRampRate);
     }
 
     // sets the conversion factors for the drive encoder based on gear ratios
